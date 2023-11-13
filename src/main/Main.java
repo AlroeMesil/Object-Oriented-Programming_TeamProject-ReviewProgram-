@@ -1,0 +1,141 @@
+package main;
+
+import java.util.Scanner;
+import mgr.Manager;
+
+public class Main {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub	
+		Manager mgr = new Manager();
+		UserData userData = new UserData();
+		Scanner scanner = new Scanner(System.in);
+		mgr.readAllPost("postList.txt");
+		
+		// 아이디 참조(임시)
+		String userId = null;
+		
+		int type = 0;
+		System.out.println("========================================================");
+		while (true) {
+//			System.out.print("(1)user 관련 기능 (2)게시글 출력 (3)게시글 입력 (4)게시글 검색 (5)게시글 삭제 (6)게시글 수정 (기타)종료\n");
+			while(true) {
+				System.out.print("(1)user 관련 기능 (2)게시글 관련 기능 (기타)종료\n");
+				type = scanner.nextInt();
+				if(type == 1) {
+					while (true) {
+			            System.out.println("[user 관련 기능]\n" +
+			                    "1. 회원가입\n" +
+			                    "2. 로그인\n"+
+			                    "3. 전체 회원 정보 출력\n" +
+			                    "4. 회원 삭제\n" +
+			                    "5. 회원 정보 조회\n" +
+			                    "6. 뒤로가기");
+			            System.out.print(">>메뉴를 선택하세요: ");
+			            int choice = scanner.nextInt();
+			            switch (choice) {
+			                case 1:
+			                    // 회원 가입
+			                    userData.SignUp();
+			                    break;
+			                case 2:
+			                    //로그인
+			                	userId = userData.login();
+			                    break;
+			                case 3:
+			                    // 전체 회원 정보 출력
+			                    userData.printAllUser();
+			                    break;
+			                case 4:
+			                    // 회원 삭제
+			                    userData.removeUser();
+			                    break;
+			                case 5:
+			                    // 회원 정보 조회
+			                    userData.userMatches();
+			                    break;
+			                case 6:
+			                    // 종료
+			                    System.out.println("선택창으로 돌아갑니다.");
+			                    break;
+			                default:
+			                    System.out.println("잘못된 선택입니다. 다시 선택하세요.");
+			            }
+			            break;
+			        }
+				} else if(type == 2) {
+					while(true) {
+						System.out.println("[게시글 관련 기능]\n" +
+			                    "1. 전체 게시글 정보 출력\n" +
+			                    "2. 게시글 업로드\n"+
+			                    "3. 게시글 검색\n" +
+			                    "4. 게시글 수정\n" +
+			                    "5. 게시글 삭제\n" +
+			                    "6. 종료");
+			            System.out.print(">>메뉴를 선택하세요: ");
+			            int choice = scanner.nextInt();
+			            switch (choice) {
+			                case 1:
+			                	System.out.println("======================= 게시글 출력 =======================");
+								mgr.printAllPost();
+								break;
+			                case 2:
+			                	System.out.println("======================= 게시글 업로드 ======================="); // Get the logged-in user's ID
+		                        if (userId != null) {
+		                            mgr.addPostList(userId);
+		                            scanner.nextLine();
+		                            mgr.printAllPost();
+		                        } else {
+		                            System.out.println("로그인에 실패하였습니다. 다시 시도하세요.");
+		                        }
+		                        break;
+			                case 3:
+			                	System.out.println("======================= 게시글 검색 =======================");
+							    int searchType = 0;
+							    while(searchType >=1 || searchType <= 2) {
+							    	System.out.print("(1)키워드 검색 (2)작성자 검색 (기타)종료\n");
+								    searchType = scanner.nextInt();
+								    scanner.nextLine();
+								    if (searchType == 1) {
+								    	System.out.print("키워드를 입력하세요: ");
+								        String keyword = scanner.nextLine();
+								        mgr.searchPostsByKeyword(keyword);
+								    } else if (searchType == 2) {
+								        System.out.print("작성자의 닉네임을 입력하세요: ");
+								        String writerName = scanner.nextLine();
+								        mgr.searchPostsByWriter(writerName);
+								    } else 
+								        break;
+							    }
+							    break;
+			                case 4:
+			                	System.out.println("================ 게시글 수정 ================");
+							    System.out.print("수정할 게시글의 ID를 입력하세요: ");
+							    int postIdToEdit = scanner.nextInt();
+							    scanner.nextLine();
+							    mgr.editPost(postIdToEdit);
+							    break;
+			                case 5:
+			                	System.out.println("================ 게시글 삭제 ================");
+							    System.out.print("삭제할 게시글의 ID를 입력하세요: ");
+							    int postIdToDelete = scanner.nextInt();
+							    scanner.nextLine();
+							    mgr.deletePost(postIdToDelete);
+							    break;
+			                case 6:
+			                    // 종료
+			                	System.out.println("선택창으로 돌아갑니다.");
+			                    break;
+			                default:
+			                    System.out.println("잘못된 선택입니다. 다시 선택하세요.");
+			            }
+			            break;
+					}
+				} else {
+					System.out.println("프로그램을 종료합니다.");
+					scanner.close();
+                    System.exit(0);
+				}
+			}		
+		}
+	}
+}
