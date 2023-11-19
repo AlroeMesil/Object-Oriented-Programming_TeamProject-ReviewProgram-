@@ -70,11 +70,28 @@ public class Post implements Manageable {
 	public void read(Scanner scan) {
 		// TODO Auto-generated method stub
 		postNum = scan.nextInt();
-		postTitle = scan.next();
-		region = scan.next();
-		postCategory.put("category", scan.next());
-		postWriter = scan.next();
-        postContent = scan.nextLine();
+	    postTitle = scan.next();
+	    region = scan.next();
+	    postCategory.put("category", scan.next());
+	    postWriter = scan.next();
+	    postRate = scan.nextInt();
+	    postContent = scan.nextLine();
+	    while (scan.hasNext()) {
+	        String goodPointUserId = scan.next();
+	        if ("0".equals(goodPointUserId)) {
+	            break;
+	        } else {
+	            goodPoint.add(goodPointUserId);
+	        }
+	    }
+	    while (scan.hasNext()) {
+	        String badPointUserId = scan.next();
+	        if ("0".equals(badPointUserId)) {
+	            break;
+	        } else {
+	            badPoint.add(badPointUserId);
+	        }
+	    }
 	}
 
 	// 게시글 출력
