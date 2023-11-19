@@ -77,21 +77,33 @@ public class Main {
                     }
                     break;
                 case 3:
-                	System.out.println("======================= 게시글 검색 =======================");
+                	System.out.println("======================= 게시글 검색/분류 =======================");
 				    int searchType = 0;
-				    while(searchType >=1 || searchType <= 2) {
-				    	System.out.print("(1)키워드 검색 (2)작성자 검색 (기타)종료\n");
+				    while(searchType >=1 || searchType <= 3) {
+				    	System.out.print("(1)키워드 검색 (2)작성자 검색 (3)카테고리 검색 (4)좋아요 필터 (기타)종료\n");
 					    searchType = scanner.nextInt();
 					    scanner.nextLine();
 					    if (searchType == 1) {
 					    	System.out.print("키워드를 입력하세요: ");
-					        String keyword = scanner.nextLine();
+					        String keyword = scanner.next();
 					        mgr.searchPostsByKeyword(keyword);
 					    } else if (searchType == 2) {
 					        System.out.print("작성자의 닉네임을 입력하세요: ");
-					        String writerName = scanner.nextLine();
+					        String writerName = scanner.next();
 					        mgr.searchPostsByWriter(writerName);
-					    } else 
+					    } else if(searchType == 3) {
+					    	System.out.print("카테고리를 입력하세요: "); 
+					        String category = scanner.next(); // 실제 프로그램에서는 버튼 또는 체크박스를 통한 값 인풋
+					    	mgr.printPostsByCategory(category);
+					        break;
+					    }
+					    else if(searchType == 4) {
+					    	System.out.print("평점을 입력하세요: "); 
+					        int rate = scanner.nextInt(); // 실제 프로그램에서는 버튼 또는 체크박스를 통한 값 인풋
+					    	mgr.printPostsByRate(rate);
+					        break;
+					    }
+					    else 
 					        break;
 				    }
 				    break;
@@ -107,7 +119,7 @@ public class Main {
 				    System.out.print("삭제할 게시글의 ID를 입력하세요: ");
 				    int postIdToDelete = scanner.nextInt();
 				    scanner.nextLine();
-				    mgr.deletePost(postIdToDelete);
+				    mgr.deletePost(postIdToDelete, userId);
 				    break;
                 case 6:
                 	System.out.println("================ 게시글 정렬 ================");

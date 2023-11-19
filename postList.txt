@@ -1,10 +1,30 @@
-1 제목1 서울 맛집 user1 게시글 1 본문
-2 제목2 경기 관광명소 user2 게시글 2 본문
-3 제목3 인천 맛집 user3 게시글 3 본문
-4 제목4 서울 맛집 user4 게시글 4 본문
-5 제목5 경기 관광명소 user5 게시글 5 본문
-6 제목6 인천 관광명소 user6 게시글 6 본문
-7 제목7 서울 맛집 user7 게시글 7 본문
-8 제목8 경기 관광명소 user8 게시글 8 본문
-9 제목9 인천 맛집 user9 게시글 9 본문
-10 제목10 서울 관광명소 user10 게시글 10 본문
+1 제목1 서울 맛집 user1 5 게시글 1 본문 
+hhc411 dsad11 dmkls22 0 
+asdsa1 dasnjk1 dnsnai22 0
+2 제목2 경기 관광명소 user2 4 게시글 2 본문
+hhc411 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+3 제목3 인천 맛집 user3 5 게시글 3 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+4 제목4 서울 맛집 user4 2 게시글 4 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+5 제목5 경기 관광명소 user5 4 게시글 5 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+6 제목6 인천 관광명소 user6 2 게시글 6 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+7 제목7 서울 맛집 user7 3 게시글 7 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+8 제목8 경기 관광명소 user8 5 게시글 8 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+9 제목9 인천 맛집 user9 2 게시글 9 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0
+10 제목10 서울 관광명소 user10 1 게시글 10 본문
+hhc411 dsad11 dmkls22 0
+asdsa1 dasnjk1 dnsnai22 0

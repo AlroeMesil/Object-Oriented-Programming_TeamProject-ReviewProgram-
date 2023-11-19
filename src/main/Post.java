@@ -14,22 +14,22 @@ public class Post implements Manageable {
 	String postTitle; // 제목
 	String region; // 지역
 	String postContent; // 본문
-	Map<String, String> postCategory = new HashMap<>(); //카테고리
-	int postRate; // 게시글 평점
+	public Map<String, String> postCategory = new HashMap<>(); //카테고리
+	public int postRate; // 게시글 평점
 	public ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
 	public ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
 	
 	// 게시글 생성 메소드
 	public void createPost(ArrayList<Manageable> mList, User user) {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("게시글 제목 / 지역 / 카테고리 / 본문 순으로 입력해주세요.");
+		System.out.println("게시글 제목 / 지역 / 카테고리 / 평점 / 본문 순으로 입력해주세요.");
 		postNum = mList.size()+1;
 		postTitle = scan.next();
 		region = scan.next();
 		postCategory.put("category", scan.next());
 		postWriter = user.id;
+		postRate = scan.nextInt();
         postContent = scan.nextLine();
-        postRate = scan.nextInt();
 	}
 
 	// 게시글 수정 메소드
@@ -54,15 +54,23 @@ public class Post implements Manageable {
 	}
 
 	// 게시글 삭제 메소드
-	public void deletePost(ArrayList<Manageable> postList, int postId) {
-	    for (Manageable post : postList) {
-	        if (post instanceof Post && ((Post) post).postNum == postId) {
-	            postList.remove(post);
-	            System.out.println("게시글이 삭제되었습니다.");
-	            return;
-	        }
-	    }
-	    System.out.println("일치하는 게시글이 없습니다.");
+	public void deletePost(ArrayList<Manageable> postList, int postId, String userId) {
+		if(userId == postWriter) {
+			for (Manageable post : postList) {
+		        if (post instanceof Post && ((Post) post).postNum == postId) {
+		            postList.remove(post);
+		            System.out.println("게시글이 삭제되었습니다.");
+		            return;
+		        }
+		    }
+		} else if(userId != postWriter) {
+			System.out.println("게시글 작성자가 아닙니다.");
+		}
+		else {
+			System.out.println("일치하는 게시글이 없습니다.");
+		}
+	    
+	    
 	}
 
 	// 게시글 읽기
@@ -70,11 +78,28 @@ public class Post implements Manageable {
 	public void read(Scanner scan) {
 		// TODO Auto-generated method stub
 		postNum = scan.nextInt();
-		postTitle = scan.next();
-		region = scan.next();
-		postCategory.put("category", scan.next());
-		postWriter = scan.next();
-        postContent = scan.nextLine();
+	    postTitle = scan.next();
+	    region = scan.next();
+	    postCategory.put("category", scan.next());
+	    postWriter = scan.next();
+	    postRate = scan.nextInt();
+	    postContent = scan.nextLine();
+	    while (scan.hasNext()) {
+	        String goodPointUserId = scan.next();
+	        if ("0".equals(goodPointUserId)) {
+	            break;
+	        } else {
+	            goodPoint.add(goodPointUserId);
+	        }
+	    }
+	    while (scan.hasNext()) {
+	        String badPointUserId = scan.next();
+	        if ("0".equals(badPointUserId)) {
+	            break;
+	        } else {
+	            badPoint.add(badPointUserId);
+	        }
+	    }
 	}
 
 	// 게시글 출력
