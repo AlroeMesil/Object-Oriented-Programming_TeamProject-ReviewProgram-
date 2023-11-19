@@ -1,5 +1,7 @@
 package main;
 
+import mgr.Manageable;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,25 +35,23 @@ public class UserData {
         }
     }
     // 아이디 중복확인
-
-    public boolean userIdCheck(User user) {
-        if (!isIdOverlap(user.getId())) {
-            users.add(user);
-            return true;
-        }
-        return false;
+    public boolean userIdCheck(User newUser) {
+        if (isIdOverlap(newUser.id))
+            return false;
+        users.add(newUser);
+        return true;
     }
 
     // 아이디 중복 확인
     public boolean isIdOverlap(String id) {
         for (User user : users) {
-            if (user.getId().equals(id)) {
+            if (user.id.equals(id)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     //로그인
     public String login() {
         System.out.print("ID: ");
@@ -60,9 +60,9 @@ public class UserData {
         String pw = scanner.next();
         if (contains(id, pw)) {
             System.out.println("로그인 성공!");
-            return id; 
+            return id;
         }
-        return null; 
+        return null;
     }
 
     //회원 삭제
@@ -76,11 +76,11 @@ public class UserData {
             System.out.println("해당 아이디의 회원이 없음");
         }
     }
-    
+
     // 회원 삭제
     public boolean withdraw(String id) {
         for (User user : users) {
-            if (user.getId().equals(id)) {
+            if (user.matches(id)) {
                 users.remove(user);
                 return true;
             }
@@ -91,28 +91,28 @@ public class UserData {
     // 유저 정보 가져오기
     public User getUser(String id) {
         for (User user : users) {
-            if (user.getId().equals(id)) {
+            if (user.matches(id)) {
                 return user;
             }
         }
         return null;
     }
 
-    // 회원인지 아닌지 확인
+    // 회원 여부 확인
     public boolean contains(String id,String pw) {
         for (User user : users) {
-            if (!user.getId().equals(id)) {
+            if (!user.matches(id)) {
                 System.out.println("ID불일치");
                 return false;
             }
-            if (!user.getPw().equals(pw)) {
+            if (!user.matches(pw)) {
                 System.out.println("PW불일치");
                 return false;
             }
         }
         return true;
     }
-
+    //모든 유저 반환
     public ArrayList<User> getAllUsers() {
         return users;
     }
@@ -121,15 +121,8 @@ public class UserData {
         System.out.println("\n전체 회원 정보를 출력합니다.");
         ArrayList<User> allUsers = getAllUsers();
         for (User user : allUsers) {
-            printUser(user);
+            user.print();
         }
-    }
-    //User출력
-    public void printUser(User user){
-        System.out.println(
-                "ID: " + user.getId() + ", Name: " + user.getName()
-                        + ", 닉네임:" + user.getNickName()+ ", Email: "
-                        + user.getEmail());
     }
     //회원정보 조회
     public void userMatches() {
@@ -139,12 +132,10 @@ public class UserData {
         User userInfo = getUser(getInfoId);
 
         if (userInfo != null) {
-            printUser(userInfo);
+            userInfo.print();
         } else {
             System.out.println("해당 아이디의 회원이 없음");
         }
     }
 
-
 }
-

@@ -63,6 +63,60 @@ public class Manager {
         postList.sort(Comparator.comparingInt(o -> ((Post) o).goodPoint.size()));
         printAllPost();
     }
+    
+    // 게시글 평점 높은 순 출력
+    public void printPostsByPostRateDescending() {
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).postRate).reversed());
+        printAllPost();
+    }
+
+    // 게시글 평점 낮은 순 출력
+    public void printPostsByPostRateAscending() {
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).postRate));
+        postList.forEach(post -> ((Post) post).print());
+    }
+    
+    // 게시글 카테고리로 출력
+    public void printPostsByCategory(String category) {
+
+        boolean found = false;
+
+        for (Manageable post : postList) {
+            if (post instanceof Post) {
+                Post p = (Post) post;
+                if (p.postCategory.get("category").equalsIgnoreCase(category)) {
+                    p.print();
+                    found = true;
+                    System.out.println("========================================================");
+                }
+            }
+        }
+
+        if (!found) {
+            System.out.println("일치하는 게시글이 없습니다.");
+        }
+    }
+    
+    // 게시글 평점 이상으로 출력
+    public void printPostsByRate(int rate) {
+        System.out.print("평점 이상을 입력하세요: ");
+        boolean found = false;
+
+        for (Manageable post : postList) {
+            if (post instanceof Post) {
+                Post p = (Post) post;
+                if (p.postRate >= rate) {
+                    p.print();
+                    found = true;
+                    System.out.println("========================================================");
+                }
+            }
+        }
+
+        if (!found) {
+            System.out.println("일치하는 게시글이 없습니다.");
+        }
+    }
 
     /*// 좋아요 적은순 출력
     public void printPostsByGoodPointAscending() {
@@ -132,9 +186,9 @@ public class Manager {
 	}
 	
 	// Delete
-	public void deletePost(int postId) {
+	public void deletePost(int postId, String userId) {
 	    Post post = new Post();
-	    post.deletePost(postList, postId);
+	    post.deletePost(postList, postId, userId);
 	}
 	// ================= 게시글 CRUD 기능 ==================
 	
