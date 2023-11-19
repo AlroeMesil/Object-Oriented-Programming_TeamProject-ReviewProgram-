@@ -1,11 +1,16 @@
 package main;
 
 public class User {
-    String id;
+	String id;
     private String pw;
     private String name;
     private String nickName;
     private String email;
+    
+    public User() {
+		// TODO Auto-generated constructor stub
+		
+	}
 
     public User(String id, String pw, String name, String nickName, String email) {
         setId(id);

@@ -3,7 +3,10 @@ package mgr;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import main.*;
 
@@ -34,6 +37,7 @@ public class Manager {
 		}
 	}
 	
+	// 게시글 출력 메소드
 	public void printAllPost() {
 		// TODO Auto-generated method stub
 		for (Manageable m: postList) {
@@ -41,33 +45,39 @@ public class Manager {
 			System.out.print("========================================================\n");
 		}
 	}
+	
+	// 게시글 최신순 출력 메소드
+	public void printRecentPost() {
+		postList.sort(Comparator.comparingInt(post -> ((Post) post).postNum).reversed());
+        printAllPost();
+	}
+	
+	// 게시글 오래된순 출력 메소드
+	public void printOldPost() {
+		postList.sort(Comparator.comparingInt(post -> ((Post) post).postNum));
+        printAllPost();
+	}
+	
+	// 좋아요 많은순 출력
+    public void printPostsByGoodPointDescending() {
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).goodPoint.size()));
+        printAllPost();
+    }
+
+    /*// 좋아요 적은순 출력
+    public void printPostsByGoodPointAscending() {
+    	List<Post> posts = postList.stream()
+                .filter(post -> post instanceof Post)
+                .map(post -> (Post) post)
+                .collect(Collectors.toList());
+        posts.sort(Comparator.comparingInt(o -> o.goodPoint.size()));
+        posts.forEach(Post::print);
+        printAllPost();
+    }*/
 	// ==================== 출력 코드 =====================
 	
 	// ==================== 검색 코드 =====================
-	/* 원본 코드	
-	public void search(Scanner scan) {
-		String name = null;
-		while (true) {
-			System.out.print("키워드:");
-			name = scan.next();
-			if (name.equals("end"))
-				break;
-			for (Manageable m : mList) {
-				if (m.matches(name))
-					m.print();
-			}
-		}
-	}
-
-	public Manageable find(String kwd) {
-		// TODO Auto-generated method stub
-		for (Manageable m: mList) {
-			if (m.matches(kwd))
-				return m;
-		}
-		return null;
-	}*/
-
+	// 키워드 검색 메소드
 	public void searchPostsByKeyword(String keyword) {
 	    for (Manageable post : postList) {
 	        if (post.matches(keyword)) {
@@ -76,7 +86,8 @@ public class Manager {
 	        }
 	    }
 	}
-
+	
+	// 작성자 이름 검색 메소드
 	public void searchPostsByWriter(String writerName) {
 	    for (Manageable post : postList) {
 	        if (post instanceof Post && ((Post) post).postWriter.equals(writerName)) {
@@ -87,7 +98,7 @@ public class Manager {
 	}
 	// ==================== 검색 코드 =====================
 	
-	// ==================== CRUD 기능 =====================
+	// ================= 게시글 CRUD 기능 ==================
 	// Create
 	public void addPostList(String userId) {
 		Post post = new Post();
@@ -125,7 +136,52 @@ public class Manager {
 	    Post post = new Post();
 	    post.deletePost(postList, postId);
 	}
+	// ================= 게시글 CRUD 기능 ==================
 	
+	// ================= 게시글 평가 기능 ==================
+	// 게시글 좋아요 메소드
+    public void addGoodPointToPost(String userId, int postId) {
+        for (Manageable post : postList) {
+            if (post instanceof Post && ((Post) post).postNum == postId) {
+                ((Post) post).addGoodPoint(userId);
+                return;
+            }
+        }
+        System.out.println("일치하는 게시글이 없습니다.");
+    }
+
+    // 게시글 좋아요 삭제 메소드
+    public void deleteGoodPointFromPost(String userId, int postId) {
+        for (Manageable post : postList) {
+            if (post instanceof Post && ((Post) post).postNum == postId) {
+                ((Post) post).deleteGoodPoint(userId);
+                return;
+            }
+        }
+        System.out.println("일치하는 게시글이 없습니다.");
+    }
+
+    // 게시글 싫어요 메소드
+    public void addBadPointToPost(String userId, int postId) {
+        for (Manageable post : postList) {
+            if (post instanceof Post && ((Post) post).postNum == postId) {
+                ((Post) post).addBadPoint(userId);
+                return;
+            }
+        }
+        System.out.println("일치하는 게시글이 없습니다.");
+    }
+
+    // 게시글 싫어요 삭제 메소드
+    public void deleteBadPointFromPost(String userId, int postId) {
+        for (Manageable post : postList) {
+            if (post instanceof Post && ((Post) post).postNum == postId) {
+                ((Post) post).deleteBadPoint(userId);
+                return;
+            }
+        }
+        System.out.println("일치하는 게시글이 없습니다.");
+    }
 	
 
 }

@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -9,11 +10,14 @@ import mgr.Manageable;
 
 public class Post implements Manageable {
 	public int postNum; // 게시글 ID
-	String postTitle; // 제목
 	public String postWriter; // 작성자
+	String postTitle; // 제목
 	String region; // 지역
-	Map<String, String> postCategory = new HashMap<>(); //카테고리
 	String postContent; // 본문
+	Map<String, String> postCategory = new HashMap<>(); //카테고리
+	int postRate; // 게시글 평점
+	public ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
+	public ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
 	
 	// 게시글 생성 메소드
 	public void createPost(ArrayList<Manageable> mList, User user) {
@@ -25,6 +29,7 @@ public class Post implements Manageable {
 		postCategory.put("category", scan.next());
 		postWriter = user.id;
         postContent = scan.nextLine();
+        postRate = scan.nextInt();
 	}
 
 	// 게시글 수정 메소드
@@ -41,6 +46,9 @@ public class Post implements Manageable {
 
 	    System.out.print("새로운 본문을 입력하세요: ");
 	    this.postContent = scanner.nextLine();
+	    
+	    System.out.print("새로운 평점을 입력하세요: ");
+	    this.postRate = scanner.nextInt();
 
 	    System.out.println("게시글이 수정되었습니다.");
 	}
@@ -79,6 +87,8 @@ public class Post implements Manageable {
 		System.out.printf("[지역] %s\n", region);
 		System.out.printf("[카테고리] %s\n", postCategory.get("category"));
 		System.out.printf("[본문] %s\n", postContent);
+		System.out.printf("[좋아요] %d\n", goodPoint.size());
+		System.out.printf("[싫어요] %d\n", badPoint.size());
     }
 		
 	//게시글 검색
@@ -94,6 +104,43 @@ public class Post implements Manageable {
 	    
 	    return false;
 	}
-
+	
+	// 게시글 좋아요 추가 메소드
+	public void addGoodPoint(String userId) {
+		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
+	        goodPoint.add(userId);
+	        System.out.println("게시글을 좋아요 했습니다.");
+	    } else {
+	        System.out.println("이미 좋아요한 게시글입니다.");
+	    }
+	}
+	// 게시글 좋아요 삭제 메소드
+	public void deleteGoodPoint(String userId) {
+		if (goodPoint.contains(userId)) {
+	        goodPoint.remove(userId);
+	        System.out.println("게시글 좋아요를 취소했습니다.");
+	    } else {
+	        System.out.println("좋아요한 내역이 없습니다.");
+	    }
+	}
+	// 게시글 싫어요 추가 메소드
+	public void addBadPoint(String userId) {
+		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
+			badPoint.add(userId);
+	        System.out.println("게시글을 싫어요 했습니다.");
+	    } else {
+	        System.out.println("이미 좋아요한 게시글입니다.");
+	    }
+	}
+	// 게시글 싫어요 삭제 메소드
+	public void deleteBadPoint(String userId) {
+		if (badPoint.contains(userId)) {
+			badPoint.remove(userId);
+	        System.out.println("게시글 싫어요를 취소했습니다.");
+	    } else {
+	        System.out.println("싫어요한 내역이 없습니다.");
+	    }
+	}
+	
 
 }
