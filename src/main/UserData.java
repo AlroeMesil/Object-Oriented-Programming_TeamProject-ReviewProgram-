@@ -30,6 +30,8 @@ public class UserData {
 
         if (userIdCheck(newUser)) {
             System.out.println("\n회원 추가 성공");
+            Manager mgr = new Manager();
+            mgr.addUserList(newUser);
         } else {
             System.out.println("아이디 중복으로 회원 추가 실패");
         }
