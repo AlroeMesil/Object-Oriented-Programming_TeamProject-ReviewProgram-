@@ -22,7 +22,7 @@ public class User implements Manageable {
     public User(String id) {
         this.id = id;
     }
-
+    public User(){}
     @Override
     public boolean equals(Object o) {
         if (o == null || !(o instanceof main.User)) {

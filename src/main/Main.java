@@ -175,6 +175,7 @@ public class Main {
 		UserData userData = new UserData();
 		Scanner scanner = new Scanner(System.in);
 		mgr.readAllPost("postList.txt");
+		mgr.readAllUser("userListData.txt");
 		int type = 0;
 		System.out.println("========================================================");
 		while (true) {
