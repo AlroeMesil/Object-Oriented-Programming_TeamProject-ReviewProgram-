@@ -1,10 +1,18 @@
 package main;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 import mgr.Manageable;
 
@@ -18,6 +26,7 @@ public class Post implements Manageable {
 	public int postRate; // 게시글 평점
 	public ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
 	public ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
+	BufferedImage postImage;
 	
 	// 게시글 생성 메소드
 	public void createPost(ArrayList<Manageable> mList, User user) {
@@ -55,23 +64,23 @@ public class Post implements Manageable {
 
 	// 게시글 삭제 메소드
 	public void deletePost(ArrayList<Manageable> postList, int postId, String userId) {
-		if(userId == postWriter) {
-			for (Manageable post : postList) {
-		        if (post instanceof Post && ((Post) post).postNum == postId) {
-		            postList.remove(post);
-		            System.out.println("게시글이 삭제되었습니다.");
-		            return;
-		        }
-		    }
-		} else if(userId != postWriter) {
-			System.out.println("게시글 작성자가 아닙니다.");
-		}
-		else {
-			System.out.println("일치하는 게시글이 없습니다.");
-		}
-	    
-	    
+	    Iterator<Manageable> iterator = postList.iterator();
+	    while (iterator.hasNext()) {
+	        Manageable post = iterator.next();
+	        if (post instanceof Post && ((Post) post).postNum == postId) {
+	            if (userId.equals(((Post) post).postWriter)) {
+	                iterator.remove();
+	                System.out.println("게시글이 삭제되었습니다.");
+	                return;
+	            } else {
+	                System.out.println("게시글 작성자가 아닙니다.");
+	                return;
+	            }
+	        }
+	    }
+	    System.out.println("일치하는 게시글이 없습니다.");
 	}
+
 
 	// 게시글 읽기
 	@Override
@@ -100,14 +109,21 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
+	    File imageFile = new File("../TeamB_ReviewApp/"+postNum+".png");
+	    try {
+	    	postImage = ImageIO.read(imageFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
 	// 게시글 출력
 	@Override
 	public void print() {
 		// TODO Auto-generated method stub
 		System.out.printf("[게시글 ID] %d\n", postNum);
 		System.out.printf("[게시글 제목] %s\n", postTitle);
+		System.out.printf("[게시글 사진] %s\n", postImage);
 		System.out.printf("[작성자] %s\n", postWriter);
 		System.out.printf("[지역] %s\n", region);
 		System.out.printf("[카테고리] %s\n", postCategory.get("category"));

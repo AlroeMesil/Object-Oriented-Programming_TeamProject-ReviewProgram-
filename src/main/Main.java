@@ -47,7 +47,7 @@ public class Main {
             break;
         }
 	}
-	void postFunc(Manager mgr,Scanner scanner) {
+	void postFunc(Manager mgr,Scanner scanner, String userId) {
 		while(true) {
 			System.out.println("[게시글 관련 기능]\n" +
                     "1. 전체 게시글 정보 출력\n" +
@@ -112,7 +112,7 @@ public class Main {
 				    System.out.print("수정할 게시글의 ID를 입력하세요: ");
 				    int postIdToEdit = scanner.nextInt();
 				    scanner.nextLine();
-				    mgr.editPost(postIdToEdit);
+				    mgr.editPost(postIdToEdit, userId);
 				    break;
                 case 5:
                 	System.out.println("================ 게시글 삭제 ================");
@@ -184,7 +184,8 @@ public class Main {
 				if(type == 1) {
 					main.userFunc(userData, scanner);
 				} else if(type == 2) {
-					main.postFunc(mgr,scanner);
+					System.out.println(main.userId);
+					main.postFunc(mgr,scanner, main.userId);
 				} else {
 					System.out.println("프로그램을 종료합니다.");
 					scanner.close();
