@@ -81,7 +81,6 @@ public class Post implements Manageable {
 	    System.out.println("일치하는 게시글이 없습니다.");
 	}
 
-
 	// 게시글 읽기
 	@Override
 	public void read(Scanner scan) {
@@ -117,6 +116,7 @@ public class Post implements Manageable {
 			e.printStackTrace();
 		}
 	}
+	
 	// 게시글 출력
 	@Override
 	public void print() {
@@ -155,6 +155,7 @@ public class Post implements Manageable {
 	        System.out.println("이미 좋아요한 게시글입니다.");
 	    }
 	}
+	
 	// 게시글 좋아요 삭제 메소드
 	public void deleteGoodPoint(String userId) {
 		if (goodPoint.contains(userId)) {
@@ -164,6 +165,7 @@ public class Post implements Manageable {
 	        System.out.println("좋아요한 내역이 없습니다.");
 	    }
 	}
+	
 	// 게시글 싫어요 추가 메소드
 	public void addBadPoint(String userId) {
 		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
@@ -173,6 +175,7 @@ public class Post implements Manageable {
 	        System.out.println("이미 좋아요한 게시글입니다.");
 	    }
 	}
+	
 	// 게시글 싫어요 삭제 메소드
 	public void deleteBadPoint(String userId) {
 		if (badPoint.contains(userId)) {
@@ -181,6 +184,22 @@ public class Post implements Manageable {
 	    } else {
 	        System.out.println("싫어요한 내역이 없습니다.");
 	    }
+	}
+
+	public ArrayList<String> getGoodPoint() {
+		// TODO Auto-generated method stub
+		return goodPoint;
+	}
+
+	public String getRegion() {
+		// TODO Auto-generated method stub
+		return region;
+	}
+
+	
+	public Map<String, String> getPostCategory() {
+		// TODO Auto-generated method stub
+		return postCategory;
 	}
 	
 

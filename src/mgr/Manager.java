@@ -79,9 +79,7 @@ public class Manager {
     
     // 게시글 카테고리로 출력
     public void printPostsByCategory(String category) {
-
         boolean found = false;
-
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 Post p = (Post) post;
@@ -92,7 +90,6 @@ public class Manager {
                 }
             }
         }
-
         if (!found) {
             System.out.println("일치하는 게시글이 없습니다.");
         }
@@ -102,7 +99,6 @@ public class Manager {
     public void printPostsByRate(int rate) {
         System.out.print("평점 이상을 입력하세요: ");
         boolean found = false;
-
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 Post p = (Post) post;
@@ -113,7 +109,6 @@ public class Manager {
                 }
             }
         }
-
         if (!found) {
             System.out.println("일치하는 게시글이 없습니다.");
         }
@@ -221,7 +216,6 @@ public class Manager {
 	    }
 	    System.out.println("일치하는 게시글이 없습니다.");
 	}
-
 	// ================= 게시글 CRUD 기능 ==================
 	
 	// ================= 게시글 평가 기능 ==================
@@ -268,6 +262,17 @@ public class Manager {
         }
         System.out.println("일치하는 게시글이 없습니다.");
     }
-	
-
+	// ================= 게시글 평가 기능 ==================
+    
+	// ================= 랭킹 클래스 관리 ==================
+    public void printRegionRanking() {
+    	Ranking ranking = new Ranking();
+    	ranking.printPostsByRegionRanking(postList);
+    }
+    
+    public void printCategoryRanking() {
+    	Ranking ranking = new Ranking();
+    	ranking.printPostsByCategoryRanking(postList);
+    }
+    
 }
