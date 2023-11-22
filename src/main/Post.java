@@ -29,14 +29,14 @@ public class Post implements Manageable {
 	BufferedImage postImage;
 	
 	// 게시글 생성 메소드
-	public void createPost(ArrayList<Manageable> mList, User user) {
+	public void createPost(ArrayList<Manageable> mList, String userId) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("게시글 제목 / 지역 / 카테고리 / 평점 / 본문 순으로 입력해주세요.");
 		postNum = mList.size()+1;
 		postTitle = scan.next();
 		region = scan.next();
 		postCategory.put("category", scan.next());
-		postWriter = user.id;
+		postWriter = userId;
 		postRate = scan.nextInt();
         postContent = scan.nextLine();
 	}

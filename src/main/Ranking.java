@@ -78,7 +78,7 @@ public class Ranking {
             categoryCount.put(category, categoryCount.getOrDefault(category, 0) + 1);
         }
 
-        // 카테고리 별 게시글 수를 내림차순으로 정렬
+        // 카테고리별 게시글 수를 내림차순으로 정렬
         ArrayList<String> sortedCategories = new ArrayList<>(categoryCount.keySet());
         sortedCategories.sort(Comparator.comparingInt(categoryCount::get).reversed());
 

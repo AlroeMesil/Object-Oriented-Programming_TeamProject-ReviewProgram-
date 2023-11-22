@@ -152,8 +152,7 @@ public class Manager {
 	// Create
 	public void addPostList(String userId) {
 		Post post = new Post();
-		User user = new User(userId);
-		post.createPost(postList, user);
+		post.createPost(postList, userId);
 		postList.add(post);
 	}
 	
