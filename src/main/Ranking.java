@@ -9,37 +9,16 @@ import java.util.Map;
 import mgr.Manageable;
 
 public class Ranking {
-//    private ArrayList<User> users;
-//
-//    public Ranking(ArrayList<User> users) {
-//        this.users = users;
-//    }
-//
-//    public void updateRanking(ArrayList<Post> posts) {
-//        for (User user : users) {
-//            int userLike = calculateUserLike(posts, user.id);
-//            user.setUserLike(userLike);
-//        }
-//        Collections.sort(users, Comparator.comparingInt(User::getUserLike).reversed());
-//    }
-//
-//    private int calculateUserLike(ArrayList<Post> postLists, String userId) {
-//        int userLike = 0;
-//        for (Post post : postLists) {
-//            if (post.getGoodPoint().contains(userId)) {
-//                userLike += post.getGoodPoint().size();
-//            }
-//        }
-//        return userLike;
-//    }
-//
-//    public void printRanking() {
-//        System.out.println("User Ranking:");
-//        for (int i = 0; i < users.size(); i++) {
-//            User user = users.get(i);
-//            System.out.printf("%d. %s (좋아요: %d)\n", i + 1, user.getId(), user.getUserLike());
-//        }
-//    }
+	
+	// 사용자 인기(좋아요) 랭킹 출력
+	public void printUserRank(ArrayList<User> rankedUserList){
+        int num=1;
+        for (User user: rankedUserList){
+            System.out.print("<"+num+"위>  ");
+            user.print();
+            num++;
+        }
+    }
     
 	// 지역별 게시글 랭킹 출력
     public void printPostsByRegionRanking(ArrayList<Manageable> postList) {
