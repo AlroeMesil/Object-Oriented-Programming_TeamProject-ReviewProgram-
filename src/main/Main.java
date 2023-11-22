@@ -47,7 +47,7 @@ public class Main {
             break;
         }
 	}
-	void postFunc(Manager mgr,Scanner scanner) {
+	void postFunc(Manager mgr, Scanner scanner, String userId) {
 		while(true) {
 			System.out.println("[게시글 관련 기능]\n" +
                     "1. 전체 게시글 정보 출력\n" +
@@ -57,8 +57,8 @@ public class Main {
                     "5. 게시글 삭제\n" +
                     "6. 게시글 정렬\n" +
                     "7. 평가\n" +
-                    "8. 뒤로가기\n" +
-                    "9. 종료");
+                    "8. 뒤로가기\n"
+                    );
             System.out.print(">>메뉴를 선택하세요: ");
             int choice = scanner.nextInt();
             switch (choice) {
@@ -112,7 +112,7 @@ public class Main {
 				    System.out.print("수정할 게시글의 ID를 입력하세요: ");
 				    int postIdToEdit = scanner.nextInt();
 				    scanner.nextLine();
-				    mgr.editPost(postIdToEdit);
+				    mgr.editPost(postIdToEdit, userId);
 				    break;
                 case 5:
                 	System.out.println("================ 게시글 삭제 ================");
@@ -167,12 +167,46 @@ public class Main {
             break;
 		}
 	}
+	void rankFunc(Manager mgr, Scanner scanner, Ranking rank) {
+		while(true) {
+			System.out.println("[랭킹 기능]\n" +
+					"1. 유저 인기(좋아요) 랭킹\n" +
+					"2. 지역 랭킹\n"+
+					"3. 카테고리 랭킹\n" +
+	                "4. 뒤로가기"
+	                );
+			System.out.print(">>메뉴를 선택하세요: ");
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1: {
+//				mgr.printRegionRanking();
+				break;
+			}
+			case 2: {
+				mgr.printRegionRanking(rank);
+				break;
+			}
+			case 3: {
+				mgr.printCategoryRanking(rank);
+				break;
+			}
+			case 4: {
+				System.out.println("선택창으로 돌아갑니다.");
+				break;
+			}
+			default:
+				System.out.println("잘못된 선택입니다. 다시 선택하세요.");
+			}
+			break;
+		}
+	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Main main = new Main();
 		Manager mgr = new Manager();
 		UserData userData = new UserData();
+		Ranking rank = new Ranking();
 		Scanner scanner = new Scanner(System.in);
 		mgr.readAllPost("postList.txt");
 		mgr.readAllUser("userListData.txt");
@@ -180,13 +214,16 @@ public class Main {
 		System.out.println("========================================================");
 		while (true) {
 			while(true) {
-				System.out.print("(1)user 관련 기능 (2)게시글 관련 기능 (기타)종료\n");
+				System.out.print("(1)user 관련 기능 (2)게시글 관련 기능 (3)랭킹 기능 (기타)종료\n");
 				type = scanner.nextInt();
 				if(type == 1) {
 					main.userFunc(userData, scanner);
 				} else if(type == 2) {
-					main.postFunc(mgr,scanner);
-				} else {
+					System.out.println(main.userId); //userId 확인용
+					main.postFunc(mgr,scanner, main.userId);
+				} else if(type == 3){
+					main.rankFunc(mgr, scanner, rank);
+				}else {
 					System.out.println("프로그램을 종료합니다.");
 					scanner.close();
                     System.exit(0);

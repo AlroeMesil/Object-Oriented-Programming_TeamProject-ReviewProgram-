@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -78,9 +79,7 @@ public class Manager {
     
     // 게시글 카테고리로 출력
     public void printPostsByCategory(String category) {
-
         boolean found = false;
-
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 Post p = (Post) post;
@@ -91,7 +90,6 @@ public class Manager {
                 }
             }
         }
-
         if (!found) {
             System.out.println("일치하는 게시글이 없습니다.");
         }
@@ -101,7 +99,6 @@ public class Manager {
     public void printPostsByRate(int rate) {
         System.out.print("평점 이상을 입력하세요: ");
         boolean found = false;
-
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 Post p = (Post) post;
@@ -112,7 +109,6 @@ public class Manager {
                 }
             }
         }
-
         if (!found) {
             System.out.println("일치하는 게시글이 없습니다.");
         }
@@ -173,8 +169,7 @@ public class Manager {
 	// Create
 	public void addPostList(String userId) {
 		Post post = new Post();
-		User user = new User(userId);
-		post.createPost(postList, user);
+		post.createPost(postList, userId);
 		postList.add(post);
 	}
 	
@@ -191,21 +186,51 @@ public class Manager {
 	}
 	
 	// Update
-	public void editPost(int postId) {
+	public void editPost(int postId, String userId) {
 	    for (Manageable post : postList) {
 	        if (post instanceof Post && ((Post) post).postNum == postId) {
 	            Post editablePost = (Post) post;
-	            editablePost.updatePost();
+	            if (userId.equals(editablePost.postWriter)) {
+	                editablePost.updatePost();
+	            } else {
+	                System.out.println("게시글 작성자가 아닙니다.");
+	            }
 	            return;
 	        }
 	    }
 	    System.out.println("일치하는 게시글이 없습니다.");
 	}
+
 	
 	// Delete
 	public void deletePost(int postId, String userId) {
-	    Post post = new Post();
-	    post.deletePost(postList, postId, userId);
+	    Iterator<Manageable> iterator = postList.iterator();
+	    while (iterator.hasNext()) {
+	        Manageable post = iterator.next();
+	        if (post instanceof Post && ((Post) post).postWriter.equals(userId) && ((Post) post).postNum == postId) {
+	            iterator.remove();
+	            Post deleteablePost = (Post) post;
+	            deleteablePost.deletePost(postList, postId, userId);
+	            System.out.println("게시글이 삭제되었습니다.");
+	            
+	            // 해당 게시글의 이미지 데이터 삭제
+	            File imageFile = new File("../TeamB_ReviewApp/" + postId + ".png");
+	            if (imageFile.exists()) {
+	                if (imageFile.delete()) {
+	                    System.out.println("게시글 이미지 파일이 삭제되었습니다.");
+	                } else {
+	                    System.out.println("게시글 이미지 파일 삭제 실패");
+	                }
+	            } else {
+	                System.out.println("게시글 이미지 파일이 존재하지 않습니다.");
+	            }
+	            return;
+	        } else {
+	        	System.out.println("게시글 작성자가 아닙니다.");
+	        	return;
+	        }
+	    }
+	    System.out.println("일치하는 게시글이 없습니다.");
 	}
 	// ================= 게시글 CRUD 기능 ==================
 	
@@ -253,6 +278,15 @@ public class Manager {
         }
         System.out.println("일치하는 게시글이 없습니다.");
     }
-	
-
+	// ================= 게시글 평가 기능 ==================
+    
+	// ================= 랭킹 클래스 관리 ==================
+    public void printRegionRanking(Ranking rank) {
+    	rank.printPostsByRegionRanking(postList);
+    }
+    
+    public void printCategoryRanking(Ranking rank) {
+    	rank.printPostsByCategoryRanking(postList);
+    }
+    
 }

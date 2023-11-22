@@ -71,4 +71,10 @@ public class User implements Manageable {
         }
         return false;
     }
+    
+	public void setUserLike(int userLike) {
+		// TODO Auto-generated method stub
+		this.userLike = userLike;
+		
+	}
 }

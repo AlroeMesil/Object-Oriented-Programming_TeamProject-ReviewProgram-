@@ -107,4 +107,3 @@ public class Join extends JFrame {
     public static void main(String[] args) {
         Join join = new Join();
     }
-}
