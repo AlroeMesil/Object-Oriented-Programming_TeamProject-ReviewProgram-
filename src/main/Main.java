@@ -5,47 +5,47 @@ import mgr.Manager;
 
 public class Main {
 	String userId = null;
-	void userFunc(UserData userData, Scanner scanner) {
+	void userFunc(Scanner scanner,Manager mgr, Ranking ranking) {
 		while (true) {
-            System.out.println("[user 관련 기능]\n" +
-                    "1. 회원가입\n" +
-                    "2. 로그인\n"+
-                    "3. 전체 회원 정보 출력\n" +
-                    "4. 회원 삭제\n" +
-                    "5. 회원 정보 조회\n" +
-                    "6. 뒤로가기");
-            System.out.print(">>메뉴를 선택하세요: ");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    // 회원 가입
-                    userData.SignUp();
-                    break;
-                case 2:
-                    //로그인
-                	userId = userData.login();
-                    break;
-                case 3:
-                    // 전체 회원 정보 출력
-                    userData.printAllUser();
-                    break;
-                case 4:
-                    // 회원 삭제
-                    userData.removeUser();
-                    break;
-                case 5:
-                    // 회원 정보 조회
-                    userData.userMatches();
-                    break;
-                case 6:
-                    // 종료
-                    System.out.println("선택창으로 돌아갑니다.");
-                    break;
-                default:
-                    System.out.println("잘못된 선택입니다. 다시 선택하세요.");
-            }
-            break;
-        }
+			System.out.println("[user 관련 기능]\n" +
+					"1. 회원가입\n" +
+					"2. 로그인\n"+
+					"3. 전체 회원 정보 출력\n" +
+					"4. 회원 삭제\n" +
+					"5. 회원 정보 조회\n" +
+					"6. 뒤로가기\n");
+			System.out.print(">>메뉴를 선택하세요: ");
+			int choice = scanner.nextInt();
+			switch (choice) {
+				case 1:
+					// 회원 가입
+					mgr.SignUp();
+					break;
+				case 2:
+					//로그인
+					userId = mgr.login();
+					break;
+				case 3:
+					// 전체 회원 정보 출력
+					mgr.printAllUser();
+					break;
+				case 4:
+					// 회원 삭제
+					mgr.removeUser();
+					break;
+				case 5:
+					// 회원 정보 조회
+					mgr.userMatches();
+					break;
+				case 6:
+					// 종료
+					System.out.println("선택창으로 돌아갑니다.");
+					break;
+				default:
+					System.out.println("잘못된 선택입니다. 다시 선택하세요.");
+			}
+			break;
+		}
 	}
 	void postFunc(Manager mgr, Scanner scanner, String userId) {
 		while(true) {
@@ -179,7 +179,8 @@ public class Main {
 			int choice = scanner.nextInt();
 			switch (choice) {
 			case 1: {
-//				mgr.printRegionRanking();
+				mgr.setUserLike();
+				mgr.printUserRanking(rank, mgr.rankUserLike());
 				break;
 			}
 			case 2: {
@@ -205,7 +206,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		Main main = new Main();
 		Manager mgr = new Manager();
-		UserData userData = new UserData();
 		Ranking rank = new Ranking();
 		Scanner scanner = new Scanner(System.in);
 		mgr.readAllPost("postList.txt");
@@ -217,7 +217,7 @@ public class Main {
 				System.out.print("(1)user 관련 기능 (2)게시글 관련 기능 (3)랭킹 기능 (기타)종료\n");
 				type = scanner.nextInt();
 				if(type == 1) {
-					main.userFunc(userData, scanner);
+					main.userFunc(scanner, mgr, rank);
 				} else if(type == 2) {
 					System.out.println(main.userId); //userId 확인용
 					main.postFunc(mgr,scanner, main.userId);
