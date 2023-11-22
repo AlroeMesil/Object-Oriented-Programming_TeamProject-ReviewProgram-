@@ -147,7 +147,24 @@ public class Manager {
 	    }
 	}
 	// ==================== 검색 코드 =====================
-	
+
+	//==================유저CRUD==================
+	//유저CREATE
+	public void addUserList(User newUser) {
+		userList.add(newUser);
+	}
+	public void readAllUser(String filename) {
+		Scanner filein = openFile(filename);
+		User user = null;
+		while (filein.hasNext()) {
+			user = new User();
+			user.read(filein);
+			userList.add(user);
+		}
+		filein.close();
+	}
+	//==================유저CRUD==================
+
 	// ================= 게시글 CRUD 기능 ==================
 	// Create
 	public void addPostList(String userId) {

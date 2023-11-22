@@ -209,6 +209,7 @@ public class Main {
 		Ranking rank = new Ranking();
 		Scanner scanner = new Scanner(System.in);
 		mgr.readAllPost("postList.txt");
+		mgr.readAllUser("userListData.txt");
 		int type = 0;
 		System.out.println("========================================================");
 		while (true) {
