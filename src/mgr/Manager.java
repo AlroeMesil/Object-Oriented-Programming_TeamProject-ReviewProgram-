@@ -264,14 +264,12 @@ public class Manager {
 	// ================= 게시글 평가 기능 ==================
     
 	// ================= 랭킹 클래스 관리 ==================
-    public void printRegionRanking() {
-    	Ranking ranking = new Ranking();
-    	ranking.printPostsByRegionRanking(postList);
+    public void printRegionRanking(Ranking rank) {
+    	rank.printPostsByRegionRanking(postList);
     }
     
-    public void printCategoryRanking() {
-    	Ranking ranking = new Ranking();
-    	ranking.printPostsByCategoryRanking(postList);
+    public void printCategoryRanking(Ranking rank) {
+    	rank.printPostsByCategoryRanking(postList);
     }
     
 }

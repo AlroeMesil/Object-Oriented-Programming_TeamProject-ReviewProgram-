@@ -108,7 +108,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("../TeamB_ReviewApp/"+postNum+".png");
+	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png");
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {

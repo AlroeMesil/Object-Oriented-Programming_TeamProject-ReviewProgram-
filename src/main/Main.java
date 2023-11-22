@@ -167,7 +167,7 @@ public class Main {
             break;
 		}
 	}
-	void rankFunc(Manager mgr, Scanner scanner) {
+	void rankFunc(Manager mgr, Scanner scanner, Ranking rank) {
 		while(true) {
 			System.out.println("[랭킹 기능]\n" +
 					"1. 유저 인기(좋아요) 랭킹\n" +
@@ -183,11 +183,11 @@ public class Main {
 				break;
 			}
 			case 2: {
-				mgr.printRegionRanking();
+				mgr.printRegionRanking(rank);
 				break;
 			}
 			case 3: {
-				mgr.printCategoryRanking();
+				mgr.printCategoryRanking(rank);
 				break;
 			}
 			case 4: {
@@ -206,6 +206,7 @@ public class Main {
 		Main main = new Main();
 		Manager mgr = new Manager();
 		UserData userData = new UserData();
+		Ranking rank = new Ranking();
 		Scanner scanner = new Scanner(System.in);
 		mgr.readAllPost("postList.txt");
 		int type = 0;
@@ -220,7 +221,7 @@ public class Main {
 					System.out.println(main.userId); //userId 확인용
 					main.postFunc(mgr,scanner, main.userId);
 				} else if(type == 3){
-					main.rankFunc(mgr, scanner);
+					main.rankFunc(mgr, scanner, rank);
 				}else {
 					System.out.println("프로그램을 종료합니다.");
 					scanner.close();
