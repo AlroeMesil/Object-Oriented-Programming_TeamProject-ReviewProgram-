@@ -86,11 +86,12 @@ public class Post implements Manageable {
 	public void read(Scanner scan) {
 		// TODO Auto-generated method stub
 		postNum = scan.nextInt();
-	    postTitle = scan.next();
+	    postTitle = scan.nextLine();
 	    region = scan.next();
 	    postCategory.put("category", scan.next());
 	    postWriter = scan.next();
 	    postRate = scan.nextInt();
+	    scan.nextLine();
 	    postContent = scan.nextLine();
 	    while (scan.hasNext()) {
 	        String goodPointUserId = scan.next();
