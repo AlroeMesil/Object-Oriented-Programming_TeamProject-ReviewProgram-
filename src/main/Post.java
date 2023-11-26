@@ -17,28 +17,37 @@ import javax.imageio.ImageIO;
 import mgr.Manageable;
 
 public class Post implements Manageable {
-	public int postNum; // 게시글 ID
-	public String postWriter; // 작성자
-	String postTitle; // 제목
-	String region; // 지역
-	String postContent; // 본문
-	public Map<String, String> postCategory = new HashMap<>(); //카테고리
-	public int postRate; // 게시글 평점
-	public ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
-	public ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
+	private int postNum; // 게시글 ID
+	private String postWriter; // 작성자
+	private String postTitle; // 제목
+	private String region; // 지역
+	private String postContent; // 본문
+	private Map<String, String> postCategory = new HashMap<>(); //카테고리
+	private int postRate; // 게시글 평점
+	private ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
+	private ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
 	BufferedImage postImage;
 	
 	// 게시글 생성 메소드
 	public void createPost(ArrayList<Manageable> mList, String userId) {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("게시글 제목 / 지역 / 카테고리 / 평점 / 본문 순으로 입력해주세요.");
+		System.out.println("게시글 생성");
 		postNum = mList.size()+1;
-		postTitle = scan.next();
-		region = scan.next();
-		postCategory.put("category", scan.next());
-		postWriter = userId;
+		System.out.print("게시글 제목을 입력하세요 : ");
+		postTitle = scan.nextLine();
+
+		System.out.print("지역을 입력하세요: ");
+		region = scan.nextLine();
+
+		System.out.print("카테고리를 입력하세요: ");
+		postCategory.put("category", scan.nextLine());
+
+		System.out.print("평점을 입력하세요: ");
 		postRate = scan.nextInt();
+
+		System.out.print("게시글 본문을 입력하세요: ");
         postContent = scan.nextLine();
+		postWriter = userId;
 	}
 
 	// 게시글 수정 메소드
@@ -86,11 +95,12 @@ public class Post implements Manageable {
 	public void read(Scanner scan) {
 		// TODO Auto-generated method stub
 		postNum = scan.nextInt();
-	    postTitle = scan.next();
+	    postTitle = scan.nextLine();
 	    region = scan.next();
 	    postCategory.put("category", scan.next());
 	    postWriter = scan.next();
 	    postRate = scan.nextInt();
+	    scan.nextLine();
 	    postContent = scan.nextLine();
 	    while (scan.hasNext()) {
 	        String goodPointUserId = scan.next();
@@ -108,7 +118,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png");
+	    File imageFile = new File("../ObjectOrientedProgramming-TeamProject/images/"+postNum+".png");
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
@@ -186,9 +196,8 @@ public class Post implements Manageable {
 	    }
 	}
 
-	public ArrayList<String> getGoodPoint() {
-		// TODO Auto-generated method stub
-		return goodPoint;
+	public int getPostNum(){
+		return this.postNum;
 	}
 
 	public String getRegion() {
@@ -196,11 +205,32 @@ public class Post implements Manageable {
 		return region;
 	}
 
+	public String getPostWriter(){
+		return this.postWriter;
+	}
+
+	public String getPostTitle(){
+		return this.postTitle;
+	}
+
+	public String getPostContent(){
+		return this.postContent;
+	}
+
+	public int getPostRate(){
+		return this.postRate;
+	}
+
+	public ArrayList<String> getGoodPoint(){
+		return this.goodPoint;
+	}
+
+	public ArrayList<String> getBadPoint(){
+		return this.badPoint;
+	}
 	
 	public Map<String, String> getPostCategory() {
 		// TODO Auto-generated method stub
-		return postCategory;
+		return this.postCategory;
 	}
-	
-
 }

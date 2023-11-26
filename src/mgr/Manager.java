@@ -14,8 +14,8 @@ import main.*;
 // 코드 재사용성을 올려야함(중복 코드多)
 
 public class Manager {
-	ArrayList<Manageable> userList = new ArrayList<>();
-	ArrayList<Manageable> postList = new ArrayList<>();
+	public ArrayList<Manageable> userList = new ArrayList<>();
+	public ArrayList<Manageable> postList = new ArrayList<>();
 	Scanner scanner = new Scanner(System.in);
 	
 	public Scanner openFile(String filename) {
@@ -35,8 +35,8 @@ public class Manager {
 		for (Manageable user : userList) {
 			for (Manageable post : postList) {
 				if (user instanceof User && post instanceof Post
-							&& ((User) user).id.equals(((Post) post).postWriter)) {
-						((User) user).userLike += ((Post) post).goodPoint.size();
+							&& ((User) user).id.equals(((Post) post).getPostWriter())) {
+						((User) user).userLike += ((Post) post).getGoodPoint().size();
 				}
 			}
 		}
@@ -75,31 +75,31 @@ public class Manager {
 	
 	// 게시글 최신순 출력 메소드
 	public void printRecentPost() {
-		postList.sort(Comparator.comparingInt(post -> ((Post) post).postNum).reversed());
+		postList.sort(Comparator.comparingInt(post -> ((Post) post).getPostNum()).reversed());
         printAllPost();
 	}
 	
 	// 게시글 오래된순 출력 메소드
 	public void printOldPost() {
-		postList.sort(Comparator.comparingInt(post -> ((Post) post).postNum));
+		postList.sort(Comparator.comparingInt(post -> ((Post) post).getPostNum()));
         printAllPost();
 	}
 	
 	// 좋아요 많은순 출력
     public void printPostsByGoodPointDescending() {
-        postList.sort(Comparator.comparingInt(o -> ((Post) o).goodPoint.size()));
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).getGoodPoint().size()));
         printAllPost();
     }
     
     // 게시글 평점 높은 순 출력
     public void printPostsByPostRateDescending() {
-        postList.sort(Comparator.comparingInt(o -> ((Post) o).postRate).reversed());
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).getPostRate()).reversed());
         printAllPost();
     }
 
     // 게시글 평점 낮은 순 출력
     public void printPostsByPostRateAscending() {
-        postList.sort(Comparator.comparingInt(o -> ((Post) o).postRate));
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).getPostRate()));
         postList.forEach(post -> ((Post) post).print());
     }
     
@@ -109,7 +109,7 @@ public class Manager {
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 Post p = (Post) post;
-                if (p.postCategory.get("category").equalsIgnoreCase(category)) {
+                if (p.getPostCategory().get("category").equalsIgnoreCase(category)) {
                     p.print();
                     found = true;
                     System.out.println("========================================================");
@@ -128,7 +128,7 @@ public class Manager {
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 Post p = (Post) post;
-                if (p.postRate >= rate) {
+                if (p.getPostRate() >= rate) {
                     p.print();
                     found = true;
                     System.out.println("========================================================");
@@ -166,7 +166,7 @@ public class Manager {
 	// 작성자 이름 검색 메소드
 	public void searchPostsByWriter(String writerName) {
 	    for (Manageable post : postList) {
-	        if (post instanceof Post && ((Post) post).postWriter.equals(writerName)) {
+	        if (post instanceof Post && ((Post) post).getPostWriter().equals(writerName)) {
 	            post.print();
 	            System.out.println("========================================================");
 	        }
@@ -240,6 +240,8 @@ public class Manager {
 		if (contains(id, pw)) {
 			System.out.println("로그인 성공!");
 			return id;
+		} else{
+			System.out.println("로그인 실패!");
 		}
 		return null;
 	}
@@ -327,9 +329,9 @@ public class Manager {
 	// Update
 	public void editPost(int postId, String userId) {
 	    for (Manageable post : postList) {
-	        if (post instanceof Post && ((Post) post).postNum == postId) {
+	        if (post instanceof Post && ((Post) post).getPostNum() == postId) {
 	            Post editablePost = (Post) post;
-	            if (userId.equals(editablePost.postWriter)) {
+	            if (userId.equals(editablePost.getPostWriter())) {
 	                editablePost.updatePost();
 	            } else {
 	                System.out.println("게시글 작성자가 아닙니다.");
@@ -344,9 +346,9 @@ public class Manager {
 	// Delete
 	public void deletePost(int postId, String userId) {
 		for (Manageable post : postList) {
-	        if (post instanceof Post && ((Post) post).postNum == postId) {
+	        if (post instanceof Post && ((Post) post).getPostNum() == postId) {
 	        	Post deleteablePost = (Post) post;
-	            if (userId.equals(deleteablePost.postWriter)) {
+	            if (userId.equals(deleteablePost.getPostWriter())) {
 	            	deleteablePost.deletePost(postList, postId, userId);
 		            // 해당 게시글의 이미지 데이터 삭제
 		            File imageFile = new File("../TeamB_ReviewApp/images/" + postId + ".png");
@@ -374,7 +376,7 @@ public class Manager {
 	// 게시글 좋아요 메소드
     public void addGoodPointToPost(String userId, int postId) {
         for (Manageable post : postList) {
-            if (post instanceof Post && ((Post) post).postNum == postId) {
+            if (post instanceof Post && ((Post) post).getPostNum() == postId) {
                 ((Post) post).addGoodPoint(userId);
                 return;
             }
@@ -385,7 +387,7 @@ public class Manager {
     // 게시글 좋아요 삭제 메소드
     public void deleteGoodPointFromPost(String userId, int postId) {
         for (Manageable post : postList) {
-            if (post instanceof Post && ((Post) post).postNum == postId) {
+            if (post instanceof Post && ((Post) post).getPostNum() == postId) {
                 ((Post) post).deleteGoodPoint(userId);
                 return;
             }
@@ -396,7 +398,7 @@ public class Manager {
     // 게시글 싫어요 메소드
     public void addBadPointToPost(String userId, int postId) {
         for (Manageable post : postList) {
-            if (post instanceof Post && ((Post) post).postNum == postId) {
+            if (post instanceof Post && ((Post) post).getPostNum() == postId) {
                 ((Post) post).addBadPoint(userId);
                 return;
             }
@@ -407,7 +409,7 @@ public class Manager {
     // 게시글 싫어요 삭제 메소드
     public void deleteBadPointFromPost(String userId, int postId) {
         for (Manageable post : postList) {
-            if (post instanceof Post && ((Post) post).postNum == postId) {
+            if (post instanceof Post && ((Post) post).getPostNum() == postId) {
                 ((Post) post).deleteBadPoint(userId);
                 return;
             }
