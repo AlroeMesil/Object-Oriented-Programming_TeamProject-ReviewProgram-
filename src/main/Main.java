@@ -69,7 +69,7 @@ public class Main {
                 case 2:
                 	System.out.println("======================= 게시글 업로드 ======================="); 
                     if (userId != null) {
-                        mgr.addPostList(userId);
+//                        mgr.addPostList(userId);
                         scanner.nextLine();
                         mgr.printAllPost();
                     } else {
@@ -140,7 +140,7 @@ public class Main {
                 	if(rateSelection == 1) {
                 		System.out.print("좋아요 추가 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
-                		mgr.addGoodPointToPost(userId, postId);
+                		mgr.controlGoodPointToPost(userId, postId);
                 	} else if(rateSelection == 2) {
                 		System.out.print("좋아요 삭제 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
@@ -148,7 +148,7 @@ public class Main {
                 	} else if(rateSelection == 3) {
                 		System.out.print("싫어요 추가 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
-                		mgr.addBadPointToPost(userId, postId);
+                		mgr.controlBadPointToPost(userId, postId);
                 	} else if(rateSelection == 4) {
                 		System.out.print("싫어요 삭제 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();

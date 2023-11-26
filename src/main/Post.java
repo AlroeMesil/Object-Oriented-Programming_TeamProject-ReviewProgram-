@@ -118,7 +118,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("../ObjectOrientedProgramming-TeamProject/images/"+postNum+".png");
+	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png"); // 프로젝트 절대 경로 수정 필요
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
@@ -157,36 +157,52 @@ public class Post implements Manageable {
 	}
 	
 	// 게시글 좋아요 추가 메소드
-	public void addGoodPoint(String userId) {
-		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
+	public String controlGoodPoint(String userId) {
+		if (!goodPoint.contains(userId)) {
 	        goodPoint.add(userId);
 	        System.out.println("게시글을 좋아요 했습니다.");
-	    } else {
+	        return "add";
+	    } else if(goodPoint.contains(userId)) {
+	    	goodPoint.remove(userId);
+	        System.out.println("게시글 좋아요를 취소했습니다.");
+	        return "delete";
+	    }
+		else {
 	        System.out.println("이미 좋아요한 게시글입니다.");
+	        return "error";
 	    }
 	}
 	
-	// 게시글 좋아요 삭제 메소드
-	public void deleteGoodPoint(String userId) {
+	// 게시글 좋아요 삭제 메소드 -> UI 부분에서 사용 X
+	public boolean deleteGoodPoint(String userId) {
 		if (goodPoint.contains(userId)) {
 	        goodPoint.remove(userId);
 	        System.out.println("게시글 좋아요를 취소했습니다.");
+	        return true;
 	    } else {
 	        System.out.println("좋아요한 내역이 없습니다.");
+	        return false;
 	    }
 	}
 	
 	// 게시글 싫어요 추가 메소드
-	public void addBadPoint(String userId) {
-		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
+	public String controlBadPoint(String userId) {
+		if (!badPoint.contains(userId)) {
 			badPoint.add(userId);
 	        System.out.println("게시글을 싫어요 했습니다.");
-	    } else {
+	        return "add";
+	    } else if(badPoint.contains(userId)) {
+	    	badPoint.remove(userId);
+	        System.out.println("게시글 좋아요를 취소했습니다.");
+	        return "delete";
+	    }
+	    else {
 	        System.out.println("이미 좋아요한 게시글입니다.");
+	        return "error";
 	    }
 	}
 	
-	// 게시글 싫어요 삭제 메소드
+	// 게시글 싫어요 삭제 메소드 -> UI 부분에서 사용 X
 	public void deleteBadPoint(String userId) {
 		if (badPoint.contains(userId)) {
 			badPoint.remove(userId);

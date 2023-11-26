@@ -16,6 +16,7 @@ import main.*;
 public class Manager {
 	public ArrayList<Manageable> userList = new ArrayList<>();
 	public ArrayList<Manageable> postList = new ArrayList<>();
+	public ArrayList<Manageable> commentList = new ArrayList<>();
 	Scanner scanner = new Scanner(System.in);
 	
 	public Scanner openFile(String filename) {
@@ -140,16 +141,6 @@ public class Manager {
         }
     }
 
-    /*// 좋아요 적은순 출력
-    public void printPostsByGoodPointAscending() {
-    	List<Post> posts = postList.stream()
-                .filter(post -> post instanceof Post)
-                .map(post -> (Post) post)
-                .collect(Collectors.toList());
-        posts.sort(Comparator.comparingInt(o -> o.goodPoint.size()));
-        posts.forEach(Post::print);
-        printAllPost();
-    }*/
 	// ==================== 출력 코드 =====================
 	
 	// ==================== 검색 코드 =====================
@@ -342,7 +333,6 @@ public class Manager {
 	    System.out.println("일치하는 게시글이 없습니다.");
 	}
 
-	
 	// Delete
 	public void deletePost(int postId, String userId) {
 		for (Manageable post : postList) {
@@ -374,39 +364,41 @@ public class Manager {
 	
 	// ================= 게시글 평가 기능 ==================
 	// 게시글 좋아요 메소드
-    public void addGoodPointToPost(String userId, int postId) {
+    public String controlGoodPointToPost(String userId, int postId) {
+    	String checker = "";
         for (Manageable post : postList) {
             if (post instanceof Post && ((Post) post).getPostNum() == postId) {
-                ((Post) post).addGoodPoint(userId);
-                return;
+                checker = ((Post) post).controlGoodPoint(userId);
             }
         }
-        System.out.println("일치하는 게시글이 없습니다.");
+        return checker;
     }
 
-    // 게시글 좋아요 삭제 메소드
-    public void deleteGoodPointFromPost(String userId, int postId) {
+    // 게시글 좋아요 삭제 메소드 -> UI 부분에서 사용 X
+    public boolean deleteGoodPointFromPost(String userId, int postId) {
+    	boolean checker = false;
         for (Manageable post : postList) {
             if (post instanceof Post && ((Post) post).getPostNum() == postId) {
-                ((Post) post).deleteGoodPoint(userId);
-                return;
+            	checker = ((Post) post).deleteGoodPoint(userId);
             }
         }
-        System.out.println("일치하는 게시글이 없습니다.");
+        if(checker == true) return true;
+        else return false;
+        //System.out.println("일치하는 게시글이 없습니다.");
     }
 
     // 게시글 싫어요 메소드
-    public void addBadPointToPost(String userId, int postId) {
+    public String controlBadPointToPost(String userId, int postId) {
+    	String checker = "";
         for (Manageable post : postList) {
             if (post instanceof Post && ((Post) post).getPostNum() == postId) {
-                ((Post) post).addBadPoint(userId);
-                return;
+            	checker = ((Post) post).controlBadPoint(userId);
             }
         }
-        System.out.println("일치하는 게시글이 없습니다.");
+        return checker;
     }
 
-    // 게시글 싫어요 삭제 메소드
+    // 게시글 싫어요 삭제 메소드 -> UI 부분에서 사용 X
     public void deleteBadPointFromPost(String userId, int postId) {
         for (Manageable post : postList) {
             if (post instanceof Post && ((Post) post).getPostNum() == postId) {
@@ -414,6 +406,7 @@ public class Manager {
                 return;
             }
         }
+        
         System.out.println("일치하는 게시글이 없습니다.");
     }
 	// ================= 게시글 평가 기능 ==================
@@ -430,5 +423,48 @@ public class Manager {
 	public void printUserRanking(Ranking rank, ArrayList<User> rankedUserRanking) {
 		rank.printUserRank(rankedUserRanking);
 	}
-    
+	// ================= 랭킹 클래스 관리 ==================
+	
+	// ================= 댓글 클래스 관리 ==================
+	public void readAllComment(String filename) {
+		Scanner filein = openFile(filename);
+		Comment comment = null;
+		while (filein.hasNext()) {
+			comment = new Comment();
+			comment.read(filein);
+			commentList.add(comment);
+		}
+		filein.close();
+	}
+	
+	public void controlCommentList(int postId, String userId, String postComment) {
+		Comment comment = new Comment();
+		comment.createComment(commentList, userId, postComment, postId);
+		commentList.add(comment);
+		System.out.println("댓글이 입력되었습니다.");
+	}
+	
+	public void deleteComment(int commentId, String userId, String postComment) {
+		for (Manageable comment : postList) {
+	        if (comment instanceof Comment && ((Comment) comment).getCommentId() == commentId) {
+	        	Comment deleteablecomment = (Comment) comment;
+	            if (userId.equals(deleteablecomment.getCommentWriter())) {
+	            	deleteablecomment.deleteComment(commentList, commentId, userId);
+	            }
+		    }
+		System.out.println("일치하는 게시글이 없습니다.");
+		}
+	}
+	
+	public ArrayList<Comment> searchComment(int postId) {
+		ArrayList<Comment> commentList = new ArrayList<>();
+		for (Manageable comment : this.commentList) {
+	        if (comment instanceof Comment && ((Comment) comment).getPostId() == postId) {
+	        	Comment searchedComment = (Comment) comment;
+	        	commentList.add(searchedComment);
+	         }
+		}
+		return commentList;
+	}
+	// ================= 댓글 클래스 관리 ==================    
 }
