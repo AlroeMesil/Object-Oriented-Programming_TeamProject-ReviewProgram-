@@ -17,28 +17,37 @@ import javax.imageio.ImageIO;
 import mgr.Manageable;
 
 public class Post implements Manageable {
-	public int postNum; // 게시글 ID
-	public String postWriter; // 작성자
-	String postTitle; // 제목
-	String region; // 지역
-	String postContent; // 본문
-	public Map<String, String> postCategory = new HashMap<>(); //카테고리
-	public int postRate; // 게시글 평점
-	public ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
-	public ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
+	private int postNum; // 게시글 ID
+	private String postWriter; // 작성자
+	private String postTitle; // 제목
+	private String region; // 지역
+	private String postContent; // 본문
+	private Map<String, String> postCategory = new HashMap<>(); //카테고리
+	private int postRate; // 게시글 평점
+	private ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
+	private ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
 	BufferedImage postImage;
 	
 	// 게시글 생성 메소드
 	public void createPost(ArrayList<Manageable> mList, String userId) {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("게시글 제목 / 지역 / 카테고리 / 평점 / 본문 순으로 입력해주세요.");
+		System.out.println("게시글 생성");
 		postNum = mList.size()+1;
-		postTitle = scan.next();
-		region = scan.next();
-		postCategory.put("category", scan.next());
-		postWriter = userId;
+		System.out.print("게시글 제목을 입력하세요 : ");
+		postTitle = scan.nextLine();
+
+		System.out.print("지역을 입력하세요: ");
+		region = scan.nextLine();
+
+		System.out.print("카테고리를 입력하세요: ");
+		postCategory.put("category", scan.nextLine());
+
+		System.out.print("평점을 입력하세요: ");
 		postRate = scan.nextInt();
+
+		System.out.print("게시글 본문을 입력하세요: ");
         postContent = scan.nextLine();
+		postWriter = userId;
 	}
 
 	// 게시글 수정 메소드
@@ -109,7 +118,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png");
+	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png"); // 프로젝트 절대 경로 수정 필요
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
@@ -148,36 +157,52 @@ public class Post implements Manageable {
 	}
 	
 	// 게시글 좋아요 추가 메소드
-	public void addGoodPoint(String userId) {
-		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
+	public String controlGoodPoint(String userId) {
+		if (!goodPoint.contains(userId)) {
 	        goodPoint.add(userId);
 	        System.out.println("게시글을 좋아요 했습니다.");
-	    } else {
+	        return "add";
+	    } else if(goodPoint.contains(userId)) {
+	    	goodPoint.remove(userId);
+	        System.out.println("게시글 좋아요를 취소했습니다.");
+	        return "delete";
+	    }
+		else {
 	        System.out.println("이미 좋아요한 게시글입니다.");
+	        return "error";
 	    }
 	}
 	
-	// 게시글 좋아요 삭제 메소드
-	public void deleteGoodPoint(String userId) {
+	// 게시글 좋아요 삭제 메소드 -> UI 부분에서 사용 X
+	public boolean deleteGoodPoint(String userId) {
 		if (goodPoint.contains(userId)) {
 	        goodPoint.remove(userId);
 	        System.out.println("게시글 좋아요를 취소했습니다.");
+	        return true;
 	    } else {
 	        System.out.println("좋아요한 내역이 없습니다.");
+	        return false;
 	    }
 	}
 	
 	// 게시글 싫어요 추가 메소드
-	public void addBadPoint(String userId) {
-		if (!goodPoint.contains(userId)&&!badPoint.contains(userId)) {
+	public String controlBadPoint(String userId) {
+		if (!badPoint.contains(userId)) {
 			badPoint.add(userId);
 	        System.out.println("게시글을 싫어요 했습니다.");
-	    } else {
+	        return "add";
+	    } else if(badPoint.contains(userId)) {
+	    	badPoint.remove(userId);
+	        System.out.println("게시글 좋아요를 취소했습니다.");
+	        return "delete";
+	    }
+	    else {
 	        System.out.println("이미 좋아요한 게시글입니다.");
+	        return "error";
 	    }
 	}
 	
-	// 게시글 싫어요 삭제 메소드
+	// 게시글 싫어요 삭제 메소드 -> UI 부분에서 사용 X
 	public void deleteBadPoint(String userId) {
 		if (badPoint.contains(userId)) {
 			badPoint.remove(userId);
@@ -187,9 +212,8 @@ public class Post implements Manageable {
 	    }
 	}
 
-	public ArrayList<String> getGoodPoint() {
-		// TODO Auto-generated method stub
-		return goodPoint;
+	public int getPostNum(){
+		return this.postNum;
 	}
 
 	public String getRegion() {
@@ -197,11 +221,37 @@ public class Post implements Manageable {
 		return region;
 	}
 
+	public String getPostWriter(){
+		return this.postWriter;
+	}
+
+	public String getPostTitle(){
+		return this.postTitle;
+	}
+	
+	public BufferedImage getPostImage() {
+	    return this.postImage;
+	}
+
+
+	public String getPostContent(){
+		return this.postContent;
+	}
+
+	public int getPostRate(){
+		return this.postRate;
+	}
+
+	public ArrayList<String> getGoodPoint(){
+		return this.goodPoint;
+	}
+
+	public ArrayList<String> getBadPoint(){
+		return this.badPoint;
+	}
 	
 	public Map<String, String> getPostCategory() {
 		// TODO Auto-generated method stub
-		return postCategory;
+		return this.postCategory;
 	}
-	
-
 }

@@ -5,7 +5,7 @@ import mgr.Manager;
 
 public class Main {
 	String userId = null;
-	void userFunc(Scanner scanner,Manager mgr, Ranking ranking) {
+	void userFunc(Scanner scanner,Manager mgr) {
 		while (true) {
 			System.out.println("[user 관련 기능]\n" +
 					"1. 회원가입\n" +
@@ -69,7 +69,7 @@ public class Main {
                 case 2:
                 	System.out.println("======================= 게시글 업로드 ======================="); 
                     if (userId != null) {
-                        mgr.addPostList(userId);
+//                        mgr.addPostList(userId);
                         scanner.nextLine();
                         mgr.printAllPost();
                     } else {
@@ -140,7 +140,7 @@ public class Main {
                 	if(rateSelection == 1) {
                 		System.out.print("좋아요 추가 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
-                		mgr.addGoodPointToPost(userId, postId);
+                		mgr.controlGoodPointToPost(userId, postId);
                 	} else if(rateSelection == 2) {
                 		System.out.print("좋아요 삭제 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
@@ -148,7 +148,7 @@ public class Main {
                 	} else if(rateSelection == 3) {
                 		System.out.print("싫어요 추가 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
-                		mgr.addBadPointToPost(userId, postId);
+                		mgr.controlBadPointToPost(userId, postId);
                 	} else if(rateSelection == 4) {
                 		System.out.print("싫어요 삭제 할 게시글 ID를 입력해주세요.(실제 프로그램에서는 해당 페이지의 ID값 참조) >> ");
                 		int postId = scanner.nextInt();
@@ -214,10 +214,10 @@ public class Main {
 		System.out.println("========================================================");
 		while (true) {
 			while(true) {
-				System.out.print("(1)user 관련 기능 (2)게시글 관련 기능 (3)랭킹 기능 (기타)종료\n");
+				System.out.print("(1)User 기능 (2)Post 기능 (3)Ranking 기능 (기타)종료\n");
 				type = scanner.nextInt();
 				if(type == 1) {
-					main.userFunc(scanner, mgr, rank);
+					main.userFunc(scanner, mgr);
 				} else if(type == 2) {
 					System.out.println(main.userId); //userId 확인용
 					main.postFunc(mgr,scanner, main.userId);
