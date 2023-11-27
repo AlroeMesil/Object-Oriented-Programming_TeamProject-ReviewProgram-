@@ -228,6 +228,11 @@ public class Post implements Manageable {
 	public String getPostTitle(){
 		return this.postTitle;
 	}
+	
+	public BufferedImage getPostImage() {
+	    return this.postImage;
+	}
+
 
 	public String getPostContent(){
 		return this.postContent;

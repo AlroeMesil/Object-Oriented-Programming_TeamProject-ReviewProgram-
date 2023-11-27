@@ -7,4 +7,4 @@ user6 password6 UserName6 Nickname6 user6@example.com 16
 user7 password7 UserName7 Nickname7 user7@example.com 42
 user8 password8 UserName8 Nickname8 user8@example.com 37
 user9 password9 UserName9 Nickname9 user9@example.com 25
-user10 password10 UserName10 Nickname10 user10@example.com 9    
+user10 password10 UserName10 Nickname10 user10@example.com 9

@@ -122,6 +122,34 @@ public class Manager {
         }
     }
     
+    // UI 카테고리 검색
+    public ArrayList<Manageable> getPostsByCategory(String category) {
+        return postList.stream()
+                .filter(post -> post instanceof Post)
+                .filter(post -> ((Post) post).getPostCategory().get("category").equalsIgnoreCase(category))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
+    // UI 지역 검색
+    public ArrayList<Manageable> getPostsByRegion(String region) {
+		return postList.stream()
+                .filter(post -> post instanceof Post)
+                .filter(post -> ((Post) post).getRegion().equalsIgnoreCase(region))
+                .collect(Collectors.toCollection(ArrayList::new));
+	}
+    
+    public ArrayList<Manageable> getPostsByCategoryAndRegion(String category, String region) {
+        return postList.stream()
+                .filter(post -> post instanceof Post)
+                .filter(post -> {
+                    Post p = (Post) post;
+                    return (category.equals("전체") || p.getPostCategory().get("category").equalsIgnoreCase(category))
+                            && (region.equals("전체") || p.getRegion().equalsIgnoreCase(region));
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    
     // 게시글 평점 이상으로 출력
     public void printPostsByRate(int rate) {
         System.out.print("평점 이상을 입력하세요: ");
@@ -154,6 +182,13 @@ public class Manager {
 	    }
 	}
 	
+	// 키워드 검색 메소드(UI)
+	public ArrayList<Manageable> searchPostsByKeywordUI(String keyword) {
+	    return postList.stream()
+	            .filter(post -> post.matches(keyword))
+	            .collect(Collectors.toCollection(ArrayList::new));
+	}
+	
 	// 작성자 이름 검색 메소드
 	public void searchPostsByWriter(String writerName) {
 	    for (Manageable post : postList) {
@@ -163,6 +198,7 @@ public class Manager {
 	        }
 	    }
 	}
+	
 	// ==================== 검색 코드 =====================
 	
 	// ================= 유저 CRUD 기능 ==================
