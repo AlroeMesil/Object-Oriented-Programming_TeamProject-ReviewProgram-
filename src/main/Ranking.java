@@ -9,42 +9,22 @@ import java.util.Map;
 import mgr.Manageable;
 
 public class Ranking {
-//    private ArrayList<User> users;
-//
-//    public Ranking(ArrayList<User> users) {
-//        this.users = users;
-//    }
-//
-//    public void updateRanking(ArrayList<Post> posts) {
-//        for (User user : users) {
-//            int userLike = calculateUserLike(posts, user.id);
-//            user.setUserLike(userLike);
-//        }
-//        Collections.sort(users, Comparator.comparingInt(User::getUserLike).reversed());
-//    }
-//
-//    private int calculateUserLike(ArrayList<Post> postLists, String userId) {
-//        int userLike = 0;
-//        for (Post post : postLists) {
-//            if (post.getGoodPoint().contains(userId)) {
-//                userLike += post.getGoodPoint().size();
-//            }
-//        }
-//        return userLike;
-//    }
-//
-//    public void printRanking() {
-//        System.out.println("User Ranking:");
-//        for (int i = 0; i < users.size(); i++) {
-//            User user = users.get(i);
-//            System.out.printf("%d. %s (좋아요: %d)\n", i + 1, user.getId(), user.getUserLike());
-//        }
-//    }
-    
-	// 지역별 게시글 랭킹 출력
-    public void printPostsByRegionRanking(ArrayList<Manageable> postList) {
-    	System.out.println("========================================================");
-        System.out.println("지역 랭킹:");
+
+    // 사용자 인기(좋아요) 랭킹 출력
+    public void printUserRank(ArrayList<User> rankedUserList){
+        int num=1;
+        for (User user: rankedUserList){
+            System.out.print("<"+num+"위>  ");
+            user.print();
+            num++;
+        }
+    }
+
+    // 지역별 게시글 랭킹 출력
+    public String printPostsByRegionRanking(ArrayList<Manageable> postList) {
+        StringBuilder result = new StringBuilder();
+        result.append("========================================================\n");
+        result.append("지역 랭킹:\n");
 
         // 각 지역의 게시글 수 세기
         Map<String, Integer> regionCount = new HashMap<>();
@@ -58,18 +38,24 @@ public class Ranking {
         sortedRegions.sort(Comparator.comparingInt(regionCount::get).reversed());
 
         // 각 지역의 게시글 수 출력
-        for (int i = 0; i < sortedRegions.size(); i++) {
+        for (int i = 0; i < 5; i++) {
             String region = sortedRegions.get(i);
             int count = regionCount.get(region);
             System.out.printf("%d등 %s: %d개\n", i + 1, region, count);
+            result.append(String.format("<%d등> %s: %d개\n", i + 1, region, count));
         }
         System.out.println("========================================================");
+
+        result.append("========================================================\n");
+        return result.toString();
     }
 
+
     // 카테고리 별 게시글 랭킹 출력
-    public void printPostsByCategoryRanking(ArrayList<Manageable> postList) {
-    	System.out.println("========================================================");
-        System.out.println("카테고리 랭킹:");
+    public String printPostsByCategoryRanking(ArrayList<Manageable> postList) {
+        StringBuilder result = new StringBuilder();
+        result.append("========================================================\n");
+        result.append("카테고리 랭킹:\n");
 
         // 각 카테고리의 게시글 수 세기
         Map<String, Integer> categoryCount = new HashMap<>();
@@ -83,12 +69,43 @@ public class Ranking {
         sortedCategories.sort(Comparator.comparingInt(categoryCount::get).reversed());
 
         // 각 카테고리의 게시글 수 출력
-        for (int i = 0; i < sortedCategories.size(); i++) {
+        for (int i = 0; i < 5; i++) {
             String category = sortedCategories.get(i);
             int count = categoryCount.get(category);
             System.out.printf("%d등 %s: %d개\n", i + 1, category, count);
+            result.append(String.format("<%d등> %s: %d개\n", i + 1, category, count));
         }
         System.out.println("========================================================");
+
+        result.append("========================================================\n");
+        return result.toString();
     }
-    
+
+    //게시글 별 좋아요 랭킹 출력
+    public String printPostsByGoodPointDescending(ArrayList<Manageable> postList) {
+        // 게시글 좋아요 확인
+        postList.sort(Comparator.comparingInt(o -> ((Post) o).getGoodPoint().size()).reversed());
+
+        StringBuilder result = new StringBuilder();
+        result.append("========================================================\n");
+        result.append("게시글 랭킹:\n");
+
+        // 각 게시글의 좋아요 출력
+        int num = 1;
+        for (Manageable post : postList) {
+            if (post instanceof Post) {
+                result.append(String.format("<%d등> ", num));
+                result.append(((Post) post).getTitle());
+                result.append(String.format(" (좋아요 %d개)\n", ((Post) post).getGoodPoint().size()));
+                num++;
+                if (num > 5) {
+                    break;
+                }
+            }
+        }
+
+        result.append("========================================================\n");
+        return result.toString();
+    }
+
 }

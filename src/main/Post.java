@@ -86,11 +86,12 @@ public class Post implements Manageable {
 	public void read(Scanner scan) {
 		// TODO Auto-generated method stub
 		postNum = scan.nextInt();
-	    postTitle = scan.next();
+	    postTitle = scan.nextLine();
 	    region = scan.next();
 	    postCategory.put("category", scan.next());
 	    postWriter = scan.next();
 	    postRate = scan.nextInt();
+	    scan.nextLine();
 	    postContent = scan.nextLine();
 	    while (scan.hasNext()) {
 	        String goodPointUserId = scan.next();
@@ -108,7 +109,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png");
+	    File imageFile = new File("/Users/jiyoon/Documents/랭킹페이지/images"+postNum+".png");
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
@@ -201,6 +202,8 @@ public class Post implements Manageable {
 		// TODO Auto-generated method stub
 		return postCategory;
 	}
-	
 
+	public String getTitle() {
+		return postTitle;
+	}
 }

@@ -1,6 +1,7 @@
 package main;
 
 import mgr.Manageable;
+import mgr.Manager;
 
 import java.util.ArrayList;
 import java.util.Scanner;
