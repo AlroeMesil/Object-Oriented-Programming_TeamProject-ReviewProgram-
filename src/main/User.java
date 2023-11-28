@@ -5,14 +5,14 @@ import mgr.Manageable;
 import java.util.Scanner;
 
 public class User implements Manageable {
-    String id;
+    public String id;
     String pw;
     String name;
     String nickName;
     String email;
-    Integer userLike=0;
+    public Integer userLike=0;
 
-    User(String id, String pw, String name, String nickName, String email) {
+    public User(String id, String pw, String name, String nickName, String email) {
         this.id=id;
         this.pw=pw;
         this.name=name;
@@ -22,7 +22,8 @@ public class User implements Manageable {
     public User(String id) {
         this.id = id;
     }
-    public User(){}
+    public User() {}
+
     @Override
     public boolean equals(Object o) {
         if (o == null || !(o instanceof main.User)) {
@@ -51,7 +52,7 @@ public class User implements Manageable {
         this.name=scan.next();
         this.nickName=scan.next();
         this.email=scan.next();
-//        this.userLike=scan.nextInt();
+        this.userLike=scan.nextInt();
     }
     //User출력
     @Override
@@ -70,5 +71,12 @@ public class User implements Manageable {
             return true;
         }
         return false;
+    }
+    public String getUserId(main.User user){
+        return user.id;
+    }
+
+    public int getUserLike() {
+        return userLike;
     }
 }
