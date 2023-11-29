@@ -218,26 +218,23 @@ public class Manager {
 		filein.close();
 	}
 
-	public void SignUp() {
-		System.out.println("계정 생성.");
-		System.out.print("아이디를 입력하세요: ");
-		String id = scanner.next();
-		System.out.print("비밀번호를 입력하세요: ");
-		String password = scanner.next();
-		System.out.print("이름을 입력하세요: ");
-		String name = scanner.next();
-		System.out.print("닉네임을 입력하세요: ");
-		String nickName = scanner.next();
-		System.out.print("이메일을 입력하세요: ");
-		String email = scanner.next();
+	public boolean SignUp(String userId, String userPw, String userName, String userNickName, String userEmail) {
+		String id = userId;
+		String password = userPw;
+		String name = userName;
+		String nickName = userNickName;
+		String email = userEmail;
 
 		User newUser = new User(id, password, name, nickName, email);
 
 		if (userIdCheck(newUser)) {
 			System.out.println("\n회원 추가 성공");
 			userList.add(newUser);
+			System.out.println(userList);
+			return true;
 		} else {
 			System.out.println("아이디 중복으로 회원 추가 실패");
+			return false;
 		}
 	}
 
@@ -259,11 +256,9 @@ public class Manager {
 	}
 
 	// 로그인
-	public String login() {
-		System.out.print("ID: ");
-		String id = scanner.next();
-		System.out.print("PW: ");
-		String pw = scanner.next();
+	public String login(String userId, String userPw) {
+		String id = userId;
+		String pw = userPw;
 		if (contains(id, pw)) {
 			System.out.println("로그인 성공!");
 			return id;

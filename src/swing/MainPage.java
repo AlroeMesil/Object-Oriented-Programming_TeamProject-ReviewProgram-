@@ -273,15 +273,9 @@ public class MainPage extends JFrame {
 
     
     public static void main(String[] args) {
-        Manager mgr = new Manager();
-        mgr.readAllPost("postList.txt");
-        mgr.readAllUser("userListData.txt");
-        mgr.readAllComment("commentList.txt");
-        String userId = "aaa";
-        
-        SwingUtilities.invokeLater(() -> {
-            MainPage mainPage = new MainPage(mgr, userId);
-            mainPage.setVisible(true);
-        });
+//        SwingUtilities.invokeLater(() -> {
+//            MainPage mainPage = new MainPage(mgr, userId);
+//            mainPage.setVisible(true);
+//        });
     }
  }
