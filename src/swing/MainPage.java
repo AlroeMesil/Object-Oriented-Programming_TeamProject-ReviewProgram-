@@ -15,17 +15,7 @@ import java.util.ArrayList;
 public class MainPage extends JFrame {
 	private final DefaultListModel<Manageable> recentPostsModel;
 	public String userId;
-	
-	public void showMainPage(Manager mgr, String userId) {
-	    recentPostsModel.clear();
-	    for (Manageable post : mgr.postList) {
-	        recentPostsModel.addElement(post);
-	    }
-	    revalidate();
-	    repaint();
-	}
 
-	// Combined search method
 	public void printPostsByCategoryAndRegionAndKeyword(String category, String region, String keyword, Manager mgr, JList<Manageable> recentPostsList) {
 	    ArrayList<Manageable> filteredPosts = mgr.getPostsByCategoryAndRegion(category, region);
 
@@ -47,7 +37,6 @@ public class MainPage extends JFrame {
 	    }
 	}
 	
-	 // Combined search method
     public void printPostsByCategoryAndRegion(String category, String region, Manager mgr, JList<Manageable> recentPostsList) {
         ArrayList<Manageable> filteredPosts = mgr.getPostsByCategoryAndRegion(category, region);
 
@@ -65,6 +54,20 @@ public class MainPage extends JFrame {
         }
     }
 	
+    private void goRankingPage(Manager mgr) {
+        SwingUtilities.invokeLater(() -> {
+        	new RankingPage(mgr); 
+            dispose(); 
+        });
+    }
+    
+    private void goPostWritePage(Manager mgr, String userId) {
+        SwingUtilities.invokeLater(() -> {
+        	new PostWritePage(mgr, userId); 
+            dispose(); 
+        });
+    }
+    
 	private ArrayList<Manageable> filterPostsByKeyword(ArrayList<Manageable> posts, String keyword) {
 	    ArrayList<Manageable> filteredPosts = new ArrayList<>();
 
@@ -80,12 +83,14 @@ public class MainPage extends JFrame {
 	    return filteredPosts;
 	}
 
-
     public MainPage(Manager mgr, String userId) {
     	this.userId = userId;
         setTitle("관광 명소 리뷰 프로그램");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1280, 720); 
+        setSize(1280, 720);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setVisible(true);
 
         // 중앙 패널
         JPanel centerPanel = new JPanel();
@@ -122,8 +127,7 @@ public class MainPage extends JFrame {
         // 게시글 작성 버튼
         JButton writeButton = new JButton("게시글 작성");
         writeButton.addActionListener(e -> {
-            // "게시글 작성" 버튼을 클릭했을 때 수행할 동작 추가
-            JOptionPane.showMessageDialog(MainPage.this, "게시글 작성.");
+        	goPostWritePage(mgr, userId);
         });
         centerPanel.add(writeButton, BorderLayout.SOUTH);
         
@@ -133,7 +137,7 @@ public class MainPage extends JFrame {
         JLabel regionLabel = new JLabel("지역 선택:");
         topPanel.add(regionLabel);
         
-        // 지역 선택 String category, String region, Manager mgr, JList<Manageable> recentPostsList
+        // 지역 선택
         String[] regions = {"전체", "서울", "경기", "부산", "인천", "대구", "광주", "대전", "울산", "제주"};
         String[] categories = {"전체", "관광명소", "맛집"};
         JComboBox<String> regionComboBox = new JComboBox<>(regions);
@@ -184,13 +188,11 @@ public class MainPage extends JFrame {
             String selectedCategory = (String) categoryComboBox.getSelectedItem();
 
             if ("전체".equals(selectedRegion) && "전체".equals(selectedCategory)) {
-                // If both region and category are "전체", search all posts without filtering
                 recentPostsModel.clear();
                 for (Manageable post : mgr.postList) {
                     recentPostsModel.addElement(post);
                 }
             } else {
-                // Use the combined search method
             	printPostsByCategoryAndRegionAndKeyword(selectedCategory, selectedRegion, searchText, mgr, recentPostsList);
             }
         });
@@ -201,16 +203,12 @@ public class MainPage extends JFrame {
         // 랭킹 페이지 이동 버튼
         JButton rankingButton = new JButton("랭킹 페이지");
         rankingButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(MainPage.this, "Searching for: ");
+        	goRankingPage(mgr);
         });
         topPanel.add(rankingButton);
 
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
-
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
 
     }
 
@@ -259,11 +257,10 @@ public class MainPage extends JFrame {
             return this;
         }
 
-    	// MainPage.java 내의 PostListRenderer 클래스 내의 openIndividualPostPage 메서드 수정
     	private void openIndividualPostPage(int postId) {
     	    EventQueue.invokeLater(() -> {
     	        try {
-    	            indiviBoardPage individualPostPage = new indiviBoardPage(postId, mgr, userId, this.mainPage);
+    	        	IndiviBoardPage individualPostPage = new IndiviBoardPage(postId, mgr, userId, this.mainPage);
     	            this.mainPage.setContentPane(individualPostPage.getContentPanel());
     	            this.mainPage.revalidate();
     	            this.mainPage.repaint();

@@ -13,7 +13,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class indiviBoardPage extends JPanel {
+public class IndiviBoardPage extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JFrame frame;
     private JTextField postTitleTextField;
     private JTextArea postContentTextArea;
@@ -36,7 +37,7 @@ public class indiviBoardPage extends JPanel {
         return (JPanel) frame.getContentPane();
     }
 
-    public indiviBoardPage(int postNum, Manager mgr, String userId, MainPage mainPage) {
+    public IndiviBoardPage(int postNum, Manager mgr, String userId, MainPage mainPage) {
         this.mainPage = mainPage;
         for (Manageable post : mgr.postList) {
             if (post instanceof Post && ((Post) post).getPostNum() == postNum) {
@@ -51,7 +52,6 @@ public class indiviBoardPage extends JPanel {
     public void initialize(Post post, Manager mgr, String userId, MainPage mainPage) {
         frame = new JFrame();
         frame.setBounds(100, 100, 1280, 720);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -236,9 +236,8 @@ public class indiviBoardPage extends JPanel {
                 if (renderer instanceof JLabel) {
                     JLabel commentLabel = (JLabel) renderer;
                     commentLabel.setText("<html><p style='width:250px'>" + value.toString() + "</p></html>");
-                    commentLabel.setPreferredSize(null); // Reset preferred size
+                    commentLabel.setPreferredSize(null); 
 
-                    // Calculate preferred height based on the content
                     int preferredHeight = calculatePreferredHeight(commentLabel);
                     commentLabel.setPreferredSize(new Dimension(250, preferredHeight));
                     commentLabel.setHorizontalAlignment(JLabel.LEFT);
@@ -295,8 +294,8 @@ public class indiviBoardPage extends JPanel {
     
     private void goBack(Manager mgr, String userId, MainPage MainPage) {
         SwingUtilities.invokeLater(() -> {
-            frame.dispose(); // Close the current individual post page
-            new MainPage(mgr, userId); // Open a new main page
+            frame.dispose(); 
+            new MainPage(mgr, userId); 
             mainPage.dispose();
         });
     }
