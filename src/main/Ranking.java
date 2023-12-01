@@ -5,10 +5,43 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import mgr.Manageable;
 
 public class Ranking {
+
+    // 카테고리별로 게시물이 많은 순서로 정렬된 리스트 반환
+    public ArrayList<String> getTopCategories(ArrayList<Manageable> postList, int limit) {
+        Map<String, Long> categoryCounts = postList.stream()
+                .filter(post -> post instanceof Post)
+                .map(post -> (Post) post)
+                .collect(Collectors.groupingBy(post -> post.getPostCategory().get("category"), Collectors.counting()));
+
+        ArrayList<String> topCategories = categoryCounts.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(limit)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return topCategories;
+    }
+
+    // 지역별로 게시물이 많은 순서로 정렬된 리스트 반환
+    public ArrayList<String> getTopRegions(ArrayList<Manageable> postList, int limit) {
+        Map<String, Long> regionCounts = postList.stream()
+                .filter(post -> post instanceof Post)
+                .map(post -> (Post) post)
+                .collect(Collectors.groupingBy(Post::getRegion, Collectors.counting()));
+
+        ArrayList<String> topRegions = regionCounts.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(limit)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return topRegions;
+    }
 
     // 사용자 인기(좋아요) 랭킹 출력
     public void printUserRank(ArrayList<User> rankedUserList){
@@ -95,7 +128,7 @@ public class Ranking {
         for (Manageable post : postList) {
             if (post instanceof Post) {
                 result.append(String.format("<%d등> ", num));
-                result.append(((Post) post).getTitle());
+                result.append(((Post) post).getPostTitle());
                 result.append(String.format(" (좋아요 %d개)\n", ((Post) post).getGoodPoint().size()));
                 num++;
                 if (num > 5) {
