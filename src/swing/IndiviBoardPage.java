@@ -4,7 +4,6 @@ import main.Comment;
 import main.Post;
 import mgr.Manageable;
 import mgr.Manager;
-import table.indiviBoard;
 
 import java.awt.*;
 import javax.swing.*;
