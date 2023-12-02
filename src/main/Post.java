@@ -2,8 +2,10 @@ package main;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,28 +28,32 @@ public class Post implements Manageable {
 	private int postRate; // 게시글 평점
 	private ArrayList<String> goodPoint = new ArrayList<>(Arrays.asList()); // 게시글 좋아요
 	private ArrayList<String> badPoint = new ArrayList<>(Arrays.asList()); // 게시글 싫어요
-	BufferedImage postImage;
+	private BufferedImage postImage;
 	
 	// 게시글 생성 메소드
-	public void createPost(ArrayList<Manageable> mList, String userId) {
-		Scanner scan = new Scanner(System.in);
+	public void createPost(ArrayList<Manageable> mList, String userId, String postTitle, String postRegion, String postCategory, int postRate, String postContent, BufferedImage postImage) {
 		System.out.println("게시글 생성");
-		postNum = mList.size()+1;
-		System.out.print("게시글 제목을 입력하세요 : ");
-		postTitle = scan.nextLine();
-
-		System.out.print("지역을 입력하세요: ");
-		region = scan.nextLine();
-
-		System.out.print("카테고리를 입력하세요: ");
-		postCategory.put("category", scan.nextLine());
-
-		System.out.print("평점을 입력하세요: ");
-		postRate = scan.nextInt();
-
-		System.out.print("게시글 본문을 입력하세요: ");
-        postContent = scan.nextLine();
-		postWriter = userId;
+		this.postNum = mList.size()+1;
+		this.postTitle = postTitle;
+		this.region = postRegion;
+		this.postCategory.put("category", postCategory);
+		this.postRate = postRate;
+        this.postContent = postContent;
+		this.postWriter = userId;
+		this.postImage = postImage;
+		saveImageToFile();
+		//savePostDataToFile(mList);
+	}
+	
+	private void saveImageToFile() {
+	    try {
+	        File outputfile = new File("images/" + postNum + ".png");
+	        ImageIO.write(postImage, "png", outputfile);
+	        System.out.println("게시글 이미지가 저장되었습니다.");
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        System.out.println("게시글 이미지 저장 실패");
+	    }
 	}
 
 	// 게시글 수정 메소드
@@ -118,7 +124,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("../TeamB_ReviewApp/images/"+postNum+".png"); // 프로젝트 절대 경로 수정 필요
+	    File imageFile = new File("images/"+postNum+".png");
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
