@@ -14,8 +14,9 @@ import main.*;
 // 코드 재사용성을 올려야함(중복 코드多)
 
 public class Manager {
-	ArrayList<Manageable> userList = new ArrayList<>();
+	public ArrayList<Manageable> userList = new ArrayList<>();
 	public ArrayList<Manageable> postList = new ArrayList<>();
+	public ArrayList<Manageable> commentList = new ArrayList<>();
 	Scanner scanner = new Scanner(System.in);
 
 	public Scanner openFile(String filename) {
@@ -35,8 +36,8 @@ public class Manager {
 		for (Manageable user : userList) {
 			for (Manageable post : postList) {
 				if (user instanceof User && post instanceof Post
-						&& ((User) user).id.equals(((Post) post).postWriter)) {
-					((User) user).userLike += ((Post) post).goodPoint.size();
+						&& ((User) user).id.equals(((Post) post).getPostWriter())) {
+					((User) user).userLike += ((Post) post).getGoodPoint().size();
 				}
 			}
 		}
@@ -75,31 +76,31 @@ public class Manager {
 
 	// 게시글 최신순 출력 메소드
 	public void printRecentPost() {
-		postList.sort(Comparator.comparingInt(post -> ((Post) post).postNum).reversed());
+		postList.sort(Comparator.comparingInt(post -> ((Post) post).getPostNum()).reversed());
 		printAllPost();
 	}
 
 	// 게시글 오래된순 출력 메소드
 	public void printOldPost() {
-		postList.sort(Comparator.comparingInt(post -> ((Post) post).postNum));
+		postList.sort(Comparator.comparingInt(post -> ((Post) post).getPostNum()));
 		printAllPost();
 	}
 
 	// 좋아요 많은순 출력
 	public void printPostsByGoodPointDescending() {
-		postList.sort(Comparator.comparingInt(o -> ((Post) o).goodPoint.size()));
+		postList.sort(Comparator.comparingInt(o -> ((Post) o).getGoodPoint().size()));
 		printAllPost();
 	}
 
 	// 게시글 평점 높은 순 출력
 	public void printPostsByPostRateDescending() {
-		postList.sort(Comparator.comparingInt(o -> ((Post) o).postRate).reversed());
+		postList.sort(Comparator.comparingInt(o -> ((Post) o).getPostRate()).reversed());
 		printAllPost();
 	}
 
 	// 게시글 평점 낮은 순 출력
 	public void printPostsByPostRateAscending() {
-		postList.sort(Comparator.comparingInt(o -> ((Post) o).postRate));
+		postList.sort(Comparator.comparingInt(o -> ((Post) o).getPostRate()));
 		postList.forEach(post -> ((Post) post).print());
 	}
 
@@ -109,7 +110,7 @@ public class Manager {
 		for (Manageable post : postList) {
 			if (post instanceof Post) {
 				Post p = (Post) post;
-				if (p.postCategory.get("category").equalsIgnoreCase(category)) {
+				if (p.getPostCategory().get("category").equalsIgnoreCase(category)) {
 					p.print();
 					found = true;
 					System.out.println("========================================================");
@@ -120,6 +121,34 @@ public class Manager {
 			System.out.println("일치하는 게시글이 없습니다.");
 		}
 	}
+
+	// UI 카테고리 검색
+	public ArrayList<Manageable> getPostsByCategory(String category) {
+		return postList.stream()
+				.filter(post -> post instanceof Post)
+				.filter(post -> ((Post) post).getPostCategory().get("category").equalsIgnoreCase(category))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	// UI 지역 검색
+	public ArrayList<Manageable> getPostsByRegion(String region) {
+		return postList.stream()
+				.filter(post -> post instanceof Post)
+				.filter(post -> ((Post) post).getRegion().equalsIgnoreCase(region))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	public ArrayList<Manageable> getPostsByCategoryAndRegion(String category, String region) {
+		return postList.stream()
+				.filter(post -> post instanceof Post)
+				.filter(post -> {
+					Post p = (Post) post;
+					return (category.equals("전체") || p.getPostCategory().get("category").equalsIgnoreCase(category))
+							&& (region.equals("전체") || p.getRegion().equalsIgnoreCase(region));
+				})
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+
 
 	// 게시글 평점 이상으로 출력
 	public void printPostsByRate(int rate) {
@@ -128,7 +157,7 @@ public class Manager {
 		for (Manageable post : postList) {
 			if (post instanceof Post) {
 				Post p = (Post) post;
-				if (p.postRate >= rate) {
+				if (p.getPostRate() >= rate) {
 					p.print();
 					found = true;
 					System.out.println("========================================================");
@@ -140,16 +169,6 @@ public class Manager {
 		}
 	}
 
-    /*// 좋아요 적은순 출력
-    public void printPostsByGoodPointAscending() {
-    	List<Post> posts = postList.stream()
-                .filter(post -> post instanceof Post)
-                .map(post -> (Post) post)
-                .collect(Collectors.toList());
-        posts.sort(Comparator.comparingInt(o -> o.goodPoint.size()));
-        posts.forEach(Post::print);
-        printAllPost();
-    }*/
 	// ==================== 출력 코드 =====================
 
 	// ==================== 검색 코드 =====================
@@ -163,15 +182,23 @@ public class Manager {
 		}
 	}
 
+	// 키워드 검색 메소드(UI)
+	public ArrayList<Manageable> searchPostsByKeywordUI(String keyword) {
+		return postList.stream()
+				.filter(post -> post.matches(keyword))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+
 	// 작성자 이름 검색 메소드
 	public void searchPostsByWriter(String writerName) {
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postWriter.equals(writerName)) {
+			if (post instanceof Post && ((Post) post).getPostWriter().equals(writerName)) {
 				post.print();
 				System.out.println("========================================================");
 			}
 		}
 	}
+
 	// ==================== 검색 코드 =====================
 
 	// ================= 유저 CRUD 기능 ==================
@@ -191,26 +218,23 @@ public class Manager {
 		filein.close();
 	}
 
-	public void SignUp() {
-		System.out.println("계정 생성.");
-		System.out.print("아이디를 입력하세요: ");
-		String id = scanner.next();
-		System.out.print("비밀번호를 입력하세요: ");
-		String password = scanner.next();
-		System.out.print("이름을 입력하세요: ");
-		String name = scanner.next();
-		System.out.print("닉네임을 입력하세요: ");
-		String nickName = scanner.next();
-		System.out.print("이메일을 입력하세요: ");
-		String email = scanner.next();
+	public boolean SignUp(String userId, String userPw, String userName, String userNickName, String userEmail) {
+		String id = userId;
+		String password = userPw;
+		String name = userName;
+		String nickName = userNickName;
+		String email = userEmail;
 
 		User newUser = new User(id, password, name, nickName, email);
 
 		if (userIdCheck(newUser)) {
 			System.out.println("\n회원 추가 성공");
 			userList.add(newUser);
+			System.out.println(userList);
+			return true;
 		} else {
 			System.out.println("아이디 중복으로 회원 추가 실패");
+			return false;
 		}
 	}
 
@@ -232,14 +256,14 @@ public class Manager {
 	}
 
 	// 로그인
-	public String login() {
-		System.out.print("ID: ");
-		String id = scanner.next();
-		System.out.print("PW: ");
-		String pw = scanner.next();
+	public String login(String userId, String userPw) {
+		String id = userId;
+		String pw = userPw;
 		if (contains(id, pw)) {
 			System.out.println("로그인 성공!");
 			return id;
+		} else{
+			System.out.println("로그인 실패!");
 		}
 		return null;
 	}
@@ -327,9 +351,9 @@ public class Manager {
 	// Update
 	public void editPost(int postId, String userId) {
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postNum == postId) {
+			if (post instanceof Post && ((Post) post).getPostNum() == postId) {
 				Post editablePost = (Post) post;
-				if (userId.equals(editablePost.postWriter)) {
+				if (userId.equals(editablePost.getPostWriter())) {
 					editablePost.updatePost();
 				} else {
 					System.out.println("게시글 작성자가 아닙니다.");
@@ -340,13 +364,12 @@ public class Manager {
 		System.out.println("일치하는 게시글이 없습니다.");
 	}
 
-
 	// Delete
 	public void deletePost(int postId, String userId) {
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postNum == postId) {
+			if (post instanceof Post && ((Post) post).getPostNum() == postId) {
 				Post deleteablePost = (Post) post;
-				if (userId.equals(deleteablePost.postWriter)) {
+				if (userId.equals(deleteablePost.getPostWriter())) {
 					deleteablePost.deletePost(postList, postId, userId);
 					// 해당 게시글의 이미지 데이터 삭제
 					File imageFile = new File("../TeamB_ReviewApp/images/" + postId + ".png");
@@ -372,46 +395,49 @@ public class Manager {
 
 	// ================= 게시글 평가 기능 ==================
 	// 게시글 좋아요 메소드
-	public void addGoodPointToPost(String userId, int postId) {
+	public String controlGoodPointToPost(String userId, int postId) {
+		String checker = "";
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postNum == postId) {
-				((Post) post).addGoodPoint(userId);
-				return;
+			if (post instanceof Post && ((Post) post).getPostNum() == postId) {
+				checker = ((Post) post).controlGoodPoint(userId);
 			}
 		}
-		System.out.println("일치하는 게시글이 없습니다.");
+		return checker;
 	}
 
-	// 게시글 좋아요 삭제 메소드
-	public void deleteGoodPointFromPost(String userId, int postId) {
+	// 게시글 좋아요 삭제 메소드 -> UI 부분에서 사용 X
+	public boolean deleteGoodPointFromPost(String userId, int postId) {
+		boolean checker = false;
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postNum == postId) {
-				((Post) post).deleteGoodPoint(userId);
-				return;
+			if (post instanceof Post && ((Post) post).getPostNum() == postId) {
+				checker = ((Post) post).deleteGoodPoint(userId);
 			}
 		}
-		System.out.println("일치하는 게시글이 없습니다.");
+		if(checker == true) return true;
+		else return false;
+		//System.out.println("일치하는 게시글이 없습니다.");
 	}
 
 	// 게시글 싫어요 메소드
-	public void addBadPointToPost(String userId, int postId) {
+	public String controlBadPointToPost(String userId, int postId) {
+		String checker = "";
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postNum == postId) {
-				((Post) post).addBadPoint(userId);
-				return;
+			if (post instanceof Post && ((Post) post).getPostNum() == postId) {
+				checker = ((Post) post).controlBadPoint(userId);
 			}
 		}
-		System.out.println("일치하는 게시글이 없습니다.");
+		return checker;
 	}
 
-	// 게시글 싫어요 삭제 메소드
+	// 게시글 싫어요 삭제 메소드 -> UI 부분에서 사용 X
 	public void deleteBadPointFromPost(String userId, int postId) {
 		for (Manageable post : postList) {
-			if (post instanceof Post && ((Post) post).postNum == postId) {
+			if (post instanceof Post && ((Post) post).getPostNum() == postId) {
 				((Post) post).deleteBadPoint(userId);
 				return;
 			}
 		}
+
 		System.out.println("일치하는 게시글이 없습니다.");
 	}
 	// ================= 게시글 평가 기능 ==================
@@ -428,5 +454,48 @@ public class Manager {
 	public void printUserRanking(Ranking rank, ArrayList<User> rankedUserRanking) {
 		rank.printUserRank(rankedUserRanking);
 	}
+	// ================= 랭킹 클래스 관리 ==================
 
+	// ================= 댓글 클래스 관리 ==================
+	public void readAllComment(String filename) {
+		Scanner filein = openFile(filename);
+		Comment comment = null;
+		while (filein.hasNext()) {
+			comment = new Comment();
+			comment.read(filein);
+			commentList.add(comment);
+		}
+		filein.close();
+	}
+
+	public void controlCommentList(int postId, String userId, String postComment) {
+		Comment comment = new Comment();
+		comment.createComment(commentList, userId, postComment, postId);
+		commentList.add(comment);
+		System.out.println("댓글이 입력되었습니다.");
+	}
+
+	public void deleteComment(int commentId, String userId, String postComment) {
+		for (Manageable comment : postList) {
+			if (comment instanceof Comment && ((Comment) comment).getCommentId() == commentId) {
+				Comment deleteablecomment = (Comment) comment;
+				if (userId.equals(deleteablecomment.getCommentWriter())) {
+					deleteablecomment.deleteComment(commentList, commentId, userId);
+				}
+			}
+			System.out.println("일치하는 게시글이 없습니다.");
+		}
+	}
+
+	public ArrayList<Comment> searchComment(int postId) {
+		ArrayList<Comment> commentList = new ArrayList<>();
+		for (Manageable comment : this.commentList) {
+			if (comment instanceof Comment && ((Comment) comment).getPostId() == postId) {
+				Comment searchedComment = (Comment) comment;
+				commentList.add(searchedComment);
+			}
+		}
+		return commentList;
+	}
+	// ================= 댓글 클래스 관리 ==================
 }

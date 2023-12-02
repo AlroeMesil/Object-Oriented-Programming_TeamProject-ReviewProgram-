@@ -18,7 +18,7 @@ public class RankingPage extends JFrame {
         this.manager = manager;
 
         setTitle("랭킹 페이지");
-        setSize(1280, 720);
+        setSize(1024, 768);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // 전체 패널
@@ -97,7 +97,7 @@ public class RankingPage extends JFrame {
         button.setLayout(new BorderLayout());
 
         // Set button icon
-        ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(210, 210, Image.SCALE_DEFAULT));
+        ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(185, 185, Image.SCALE_DEFAULT));
         button.setIcon(icon);
 
         // Set ranking label
@@ -108,23 +108,16 @@ public class RankingPage extends JFrame {
 
         // Set button text
         JLabel nameLabel = new JLabel(buttonText);
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 20)); // 이름 폰트 크기 조절
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // 이름 폰트 크기 조절
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         button.add(nameLabel, BorderLayout.SOUTH);
 
         // Set preferred size
-        button.setPreferredSize(new Dimension(220, 270));
+        button.setPreferredSize(new Dimension(200, 240));
 
-        button.addActionListener(e -> {
-            // 버튼 클릭 시 검색 결과 페이지로 이동
-           // goToSearchResults(buttonText, ranking, MainPage, mgr);
-        });
         return button;
     }
-    // RankingPage 클래스의 goToSearchResults 메서드 수정
-    private void goToSearchResults(String buttonText, int ranking, MainPage mainPage, Manager mgr) {
-        // 선택된 지역 또는 카테고리에 따라 검색 결과 페이지로 이동
-    }
+
     public static void main(String[] args) {
         Manager manager = new Manager();
         Post post = new Post();
