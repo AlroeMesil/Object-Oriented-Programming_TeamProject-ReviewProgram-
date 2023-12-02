@@ -1,247 +1,147 @@
 package swing;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Enumeration;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
+import java.awt.EventQueue;
+
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+
+import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JSlider;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import mgr.Manager;
-import swing.MainPage;
+
+import javax.swing.SwingConstants;
 
 
-public class PostWritePage extends JFrame implements ActionListener{
-
+public class PostWritePage extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private ControlPage parent;
+	private JTextField postTitleTextField;
+	private String selectedImagePath;
+	private JFileChooser fileChooser;
 
-	public PostWritePage(Manager mgr, String userId) {
-		setSize(1280,720);
-		setTitle("게시글 작성");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
-        
-        Font font = new Font(null, Font.PLAIN|Font.BOLD, 20);//글씨 크기 변경
-        setLayout(new BorderLayout());
-    	
-        JPanel button = new JPanel(new BorderLayout());//카테고리+지역
-        JPanel panel2 = new JPanel(new BorderLayout());//button+file
-        JPanel north = new JPanel(new BorderLayout());//title+panel2
-        
-        //1. 게시글 제목
-        JPanel title = new JPanel();
-        JTextField titleField = new JTextField("제목",60);
-        titleField.setPreferredSize(new Dimension(100,80));
-        titleField.setFont(font);
-        title.add(titleField);
-        north.add(title,BorderLayout.NORTH);
-        
-       
-        //2-1. 지역
-        JRadioButton rb[] = new JRadioButton[13];
-        String region_name[] = {"서울", "경기", "부산", "대구", "충북",
-        		"충남","인천","전북","전남","대전","광주","경북","경남"}; 
-        
-        JPanel region = new JPanel();
-        JLabel regionlabel = new JLabel("지역");
-        
-        regionlabel.setFont(font);
-        region.add(regionlabel);
-
-
-        ButtonGroup regiongroup = new ButtonGroup();
-        
-        for(int i=0; i<rb.length; i++){
-            rb[i] = new JRadioButton(region_name[i]);
-            regiongroup.add(rb[i]);//그룹추가
-            region.add(rb[i]);//패널추가
-            rb[i].addActionListener(this);
-        }
-        
-       
-         
-        region.setBorder(new EmptyBorder(0, 50, 0, 20));
-        region.setPreferredSize(new Dimension(550,70));
-        
-        
-        //2-2. 카테고리
-        JRadioButton cb[] = new JRadioButton[6];
-        String category_name[] = {"관광명소", "맛집", "사진", 
-        		"카페", "가족여행","연인"};
-        
-        JPanel category = new JPanel();
-        JLabel calabel = new JLabel("카테고리");
-        
-
-        calabel.setFont(font);
-        category.add(calabel);
-        
-        ButtonGroup categorygroup = new ButtonGroup();
-        for(int i=0; i<cb.length; i++){
-        	cb[i] = new JRadioButton(category_name[i]);
-            categorygroup.add(cb[i]);
-            category.add(cb[i]);
-            cb[i].addActionListener(this);
-        }
-        
-        category.setBorder(new EmptyBorder(0, 50, 0, 0));
-        category.setPreferredSize(new Dimension(400,60));
-        
-        ////button패널에 region,category추가 
-        button.add(region,BorderLayout.NORTH);
-        button.add(category,BorderLayout.SOUTH);
-        button.setBorder(new EmptyBorder(0, 100, 0, 20));
-
-        
-        //3.첨부파일
-        JPanel file = new JPanel();
-        JButton fileb = new JButton("파일 첨부");
-        fileb.setPreferredSize(new Dimension(200,80));
-        file.setBorder(new EmptyBorder(15, 0, 0, 300));
-        ///버튼기능
-        fileb.addActionListener(new ActionListener() {
-			
-			@Override
+	public PostWritePage(ControlPage parent, Manager mgr, String userId) {
+		this.parent = parent;
+        setLayout(null);
+		
+		JLabel postTitleLabel = new JLabel(" 게시글 제목");
+		postTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
+		postTitleLabel.setBounds(75, 42, 428, 45);
+		add(postTitleLabel);
+		
+		postTitleTextField = new JTextField();
+		postTitleTextField.setToolTipText("");
+		postTitleTextField.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		postTitleTextField.setBounds(75, 96, 860, 52);
+		add(postTitleTextField);
+		postTitleTextField.setColumns(10);
+		
+		JButton backButton = new JButton("뒤로가기");
+		backButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		backButton.addActionListener(e -> {
+            parent.showMainPage(mgr, userId);
+        });
+		backButton.setBounds(56, 632, 117, 50);
+		add(backButton);
+		
+		JEditorPane postContentPane = new JEditorPane();
+		postContentPane.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		postContentPane.setBounds(75, 316, 860, 292);
+		add(postContentPane);
+		
+		JLabel postContentLabel = new JLabel(" 게시글 본문");
+		postContentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
+		postContentLabel.setBounds(75, 259, 414, 45);
+		add(postContentLabel);
+		
+		JLabel postRegionLabel = new JLabel(" 지역");
+		postRegionLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
+		postRegionLabel.setBounds(75, 168, 80, 73);
+		add(postRegionLabel);
+		
+		JLabel postCategoryLabel = new JLabel("카테고리");
+		postCategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		postCategoryLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
+		postCategoryLabel.setBounds(275, 168, 120, 73);
+		add(postCategoryLabel);
+		
+		String postRegion[] = {"선택","경기","부산","대구","충북","충남","인천","전북","전남","대전","광주","경북","경남","제주"};
+		JComboBox<String> postRegionComboBox = new JComboBox<>(postRegion);
+		postRegionComboBox.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		postRegionComboBox.setBounds(150, 179, 94, 52);
+		add(postRegionComboBox);
+		
+		String postCategoey[] = {"선택","관광명소","맛집","카페","연인","가족여행","사진"};
+		JComboBox<String> postCategoryComboBox = new JComboBox<>(postCategoey);
+		postCategoryComboBox.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		postCategoryComboBox.setBounds(395, 179, 94, 52);
+		add(postCategoryComboBox);
+		
+		JLabel postRateLabel = new JLabel("평점");
+		postRateLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		postRateLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
+		postRateLabel.setBounds(524, 169, 54, 73);
+		add(postRateLabel);
+		
+		JSlider slider = new JSlider();
+		slider.setSnapToTicks(true);
+		slider.setMinimum(1);
+		slider.setValue(3);
+		slider.setMaximum(5);
+		slider.setBounds(590, 169, 150, 73);
+		add(slider);
+		
+		fileChooser = new JFileChooser();
+	    fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
+		JButton addImageButton = new JButton("첨부파일");
+		addImageButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		addImageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// 파일 선택 다이얼로그 열기
-		        JFileChooser fileChooser = new JFileChooser();
 		        int result = fileChooser.showOpenDialog(null);
-
 		        if (result == JFileChooser.APPROVE_OPTION) {
-		            // 사용자가 파일을 선택한 경우
-		            File selectedFile = fileChooser.getSelectedFile();
-		            String fileName = selectedFile.getName();
-
-		            // 선택한 파일의 이름을 저장
-		            JOptionPane.showMessageDialog(null, "선택한 파일: " + fileName);
+		            selectedImagePath = fileChooser.getSelectedFile().getAbsolutePath();
+		            System.out.print(selectedImagePath);
 		        }
-				
-			}
+		    }
 		});
-        file.add(fileb);
-        
-        
-        ////panel2에 button,file추가 
-        panel2.add(button,BorderLayout.WEST);
-        panel2.add(file,BorderLayout.EAST);
-        /////north패널에 panel2추가 
-        north.add(panel2,BorderLayout.SOUTH);
-        add(north,BorderLayout.NORTH);
-        
-        //4.본문
-        JPanel text = new JPanel();
-        JTextField textField = new JTextField("본문내용",80);
-        textField.setPreferredSize(new Dimension(150,400));
-        text.add(textField);
-        text.setBorder(new EmptyBorder(0, 0, 300, 20));
-        add(text,BorderLayout.CENTER);
-        
-       //5. 뒤로가기, 업로드
-        JPanel south = new JPanel(new BorderLayout());
-        JPanel panel = new JPanel();
-        JButton back = new JButton("뒤로가기");
-        JButton upload = new JButton("업로드");
-        
-        upload.setPreferredSize(new Dimension(150,50));
-        back.setPreferredSize(new Dimension(150,50));
-        south.setBorder(new EmptyBorder(5, 150, 5, 100));
-        
-        south.add(back,BorderLayout.WEST);
-        south.add(upload,BorderLayout.EAST);
-        
-        add(south,BorderLayout.SOUTH);
-        
-        ////뒤로가기 기능
-        back.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				goMainPage(mgr, userId);
-			}
-		});  
-        
-        ////업로드기능
-        upload.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                	
-                	String titleText = titleField.getText();
-                    String regionText = getSelectedButtonText(regiongroup);
-                    String categoryText = getSelectedButtonText(categorygroup);
-                    String bodyText = textField.getText();
-
-                    //선택된 값이 없는 경우 예외 처리
-                    if (titleText.equals("제목") || regionText == null || categoryText == null || bodyText.equals("본문내용")) {
-                        JOptionPane.showMessageDialog(null, "입력이 완료되지 않았습니다.");
-                        return;
-                    }
-
-                    //파일에 저장
-                    FileWriter fw = new FileWriter("postList.txt", true);
-                    BufferedWriter bf = new BufferedWriter(fw);
-
-                    bf.write(titleText + "\n");
-                    bf.write(regionText + "\n");
-                    bf.write(categoryText + "\n");
-                    bf.write(bodyText + "\n\n");
-
-                    bf.close();
-
-                    // 저장 성공 시
-                    JOptionPane.showMessageDialog(null, "저장 성공");
-
-               
-                } catch (Exception e2) {
-                    JOptionPane.showMessageDialog(null, "실패");
-                }
-            }
-        });
-	}
-	
-	private String getSelectedButtonText(ButtonGroup buttonGroup) {
-	    for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
-	        AbstractButton button = buttons.nextElement();
-
-	        if (button.isSelected()) {
-	            return button.getText();
+		addImageButton.setBounds(793, 169, 142, 73);
+		add(addImageButton);
+		
+		JButton uploadButton = new JButton("업로드");
+		uploadButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		uploadButton.addActionListener(e -> {
+			if (postTitleTextField.getText().equals("")) {
+	        	JOptionPane.showMessageDialog(this, "제목을 입력해주세요");
+	        } else if("선택".equals(postRegionComboBox.getSelectedItem())) {
+	        	JOptionPane.showMessageDialog(this, "지역을 선택해주세요");
+	        } else if("선택".equals(postCategoryComboBox.getSelectedItem())) {
+	        	JOptionPane.showMessageDialog(this, "카테고리를 선택해주세요");
+	        } else if("".equals(postContentPane.getText())) {
+	        	JOptionPane.showMessageDialog(this, "게시글 내용을 입력해주세요");
+	        } else if(selectedImagePath == null) {
+	        	JOptionPane.showMessageDialog(this, "이미지를 추가해주세요");
+	        } else {
+	        	mgr.addPostList(userId, postTitleTextField.getText(), postRegionComboBox.getSelectedItem().toString(),
+	                    postCategoryComboBox.getSelectedItem().toString(), slider.getValue(), postContentPane.getText(), selectedImagePath);
+	        	mgr.printAllPost();
+	        	JOptionPane.showMessageDialog(this, "게시글이 업로드되었습니다.");
+	        	parent.showMainPage(mgr, userId);
 	        }
-	    }
-	    return null;
-	}
-	
-	private void goMainPage(Manager mgr, String userId) {
-        SwingUtilities.invokeLater(() -> {
-        	new MainPage(mgr, userId); 
-            dispose(); 
         });
-    }
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		uploadButton.setBounds(851, 632, 117, 50);
+		add(uploadButton);
 		
 	}
-
-
 }
