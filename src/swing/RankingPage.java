@@ -8,7 +8,6 @@ import mgr.Manager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class RankingPage extends JFrame {
 
@@ -27,12 +26,12 @@ public class RankingPage extends JFrame {
         // 지역 랭킹을 표시하는 패널
         JPanel topRegionsPanel = new JPanel(new BorderLayout());
 
-        // 1행: "지역랭킹" 글자를 나타내는 레이블
+        // "지역랭킹" 글자 레이블
         JLabel regionRankingLabel = new JLabel("[지역랭킹]", SwingConstants.CENTER);
         regionRankingLabel.setFont(new Font("Arial", Font.PLAIN, 30));
         topRegionsPanel.add(regionRankingLabel, BorderLayout.NORTH);
 
-        // 2행: 지역 버튼을 나타내는 패널
+        // 지역 버튼을 나타내는 패널
         JPanel regionButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
         updateTopRegions(regionButtonPanel);
         topRegionsPanel.add(regionButtonPanel, BorderLayout.CENTER);
@@ -40,14 +39,17 @@ public class RankingPage extends JFrame {
         // 카테고리 랭킹을 표시하는 패널
         JPanel topCategoriesPanel = new JPanel(new BorderLayout());
 
-        // 1행: "카테고리랭킹" 글자를 나타내는 레이블
+        // "카테고리랭킹" 글자 레이블
         JLabel categoryRankingLabel = new JLabel("[카테고리랭킹]", SwingConstants.CENTER);
         categoryRankingLabel.setFont(new Font("Arial", Font.PLAIN, 30));
         topCategoriesPanel.add(categoryRankingLabel, BorderLayout.NORTH);
 
-        // 2행: 카테고리 버튼을 나타내는 패널
-        JPanel categoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        // 카테고리 버튼을 나타내는 패널
+        JPanel categoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
         updateTopCategories(categoryButtonPanel);
+
+        // 뒤로가기 버튼을 왼쪽에 추가
+        categoryButtonPanel.add(createBackButton());
         topCategoriesPanel.add(categoryButtonPanel, BorderLayout.CENTER);
 
         // 하단에 상위 게시물 및 랭킹을 표시하는 JSplitPane
@@ -65,24 +67,21 @@ public class RankingPage extends JFrame {
         ArrayList<Manageable> postList = manager.postList;
         Ranking ranking = new Ranking();
 
-        // Get the list of top regions
         ArrayList<String> topRegions = ranking.getTopRegions(postList, 5);
 
-        // Update the top regions buttons
         for (int i = 0; i < topRegions.size(); i++) {
             String region = topRegions.get(i);
             JButton regionButton = createImageButton("images/" + region + ".png", region, i + 1);
             topRegionsPanel.add(regionButton);
         }
     }
+
     private void updateTopCategories(JPanel topCategoriesPanel) {
         ArrayList<Manageable> postList = manager.postList;
         Ranking ranking = new Ranking();
 
-        // Get the list of top categories
         ArrayList<String> topCategories = ranking.getTopCategories(postList, 5);
 
-        // Update the top categories buttons
         for (int i = 0; i < topCategories.size(); i++) {
             String category = topCategories.get(i);
             JButton categoryButton = createImageButton("images/" + category + ".png", category, i + 1);
@@ -93,29 +92,41 @@ public class RankingPage extends JFrame {
     private JButton createImageButton(String imagePath, String buttonText, int ranking) {
         JButton button = new JButton();
 
-        // Set layout manager
+        // 레이아웃 매니저 설정
         button.setLayout(new BorderLayout());
 
-        // Set button icon
+        // 버튼 아이콘 설정
         ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(185, 185, Image.SCALE_DEFAULT));
         button.setIcon(icon);
 
-        // Set ranking label
+        // 랭킹 레이블 설정
         JLabel rankingLabel = new JLabel("[" + ranking + "위]");
-        rankingLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // 순위 폰트 크기 조절
+        rankingLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // 랭킹 폰트 크기 조절
         rankingLabel.setHorizontalAlignment(SwingConstants.CENTER);
         button.add(rankingLabel, BorderLayout.NORTH);
 
-        // Set button text
         JLabel nameLabel = new JLabel(buttonText);
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // 이름 폰트 크기 조절
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         button.add(nameLabel, BorderLayout.SOUTH);
 
-        // Set preferred size
         button.setPreferredSize(new Dimension(200, 240));
 
         return button;
+    }
+
+    private JButton createBackButton() {
+        JButton backButton = new JButton("뒤로가기");
+
+        backButton.setLayout(new FlowLayout(FlowLayout.LEFT));
+        backButton.setPreferredSize(new Dimension(200, 50));
+        backButton.addActionListener(e -> goBack());
+
+        return backButton;
+    }
+
+    private void goBack() {
+        this.dispose();  // 현재 프레임 닫기
     }
 
     public static void main(String[] args) {
