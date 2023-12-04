@@ -47,7 +47,7 @@ public class Post implements Manageable {
 	
 	private void saveImageToFile() {
 	    try {
-	        File outputfile = new File("images/" + postNum + ".png");
+	        File outputfile = new File("images/post/" + postNum + ".png");
 	        ImageIO.write(postImage, "png", outputfile);
 	        System.out.println("게시글 이미지가 저장되었습니다.");
 	    } catch (IOException e) {
@@ -124,7 +124,7 @@ public class Post implements Manageable {
 	            badPoint.add(badPointUserId);
 	        }
 	    }
-	    File imageFile = new File("images/"+postNum+".png");
+	    File imageFile = new File("images/post/"+postNum+".png");
 	    try {
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
@@ -151,7 +151,7 @@ public class Post implements Manageable {
 	//게시글 검색
 	@Override
 	public boolean matches(String kwd) {
-	    if (postTitle.contains(kwd) || postWriter.contains(kwd) || region.contains(kwd) || postContent.contains(kwd)) {
+	    if (postTitle.contains(kwd) || postWriter.contains(kwd) || region.contains(kwd) || postContent.contains(kwd) ||postCategory.get("category").contains(kwd)) {
 	        return true;
 	    }
 	    
@@ -236,9 +236,8 @@ public class Post implements Manageable {
 	}
 	
 	public BufferedImage getPostImage() {
-	    return this.postImage;
-	}
-
+        return postImage != null ? postImage : new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    }
 
 	public String getPostContent(){
 		return this.postContent;

@@ -8,128 +8,142 @@ import mgr.Manager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 
-public class RankingPage extends JFrame {
+public class RankingPage extends JPanel {
 
+	private ControlPage parnent;
     private Manager manager;
 
-    public RankingPage(Manager manager) {
+    public RankingPage(ControlPage parent, Manager manager, String userId) {
+    	this.parnent = parent;
         this.manager = manager;
-
-        setTitle("랭킹 페이지");
-        setSize(1280, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // 전체 패널
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        // 지역 랭킹을 표시하는 패널
-        JPanel topRegionsPanel = new JPanel(new BorderLayout());
-
-        // 1행: "지역랭킹" 글자를 나타내는 레이블
-        JLabel regionRankingLabel = new JLabel("[지역랭킹]", SwingConstants.CENTER);
+        
+//        JPanel background = new ImagePanel();
+//		background.setBounds(0, 0, 1024, 768);
+//		add(background);
+        
+        // "지역랭킹" 글자 레이블
+        JLabel regionRankingLabel = new JLabel("[지역 랭킹]", SwingConstants.CENTER);
         regionRankingLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-        topRegionsPanel.add(regionRankingLabel, BorderLayout.NORTH);
+        add(regionRankingLabel, BorderLayout.NORTH);
 
-        // 2행: 지역 버튼을 나타내는 패널
+        // 지역 버튼을 나타내는 패널
         JPanel regionButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
         updateTopRegions(regionButtonPanel);
-        topRegionsPanel.add(regionButtonPanel, BorderLayout.CENTER);
+        add(regionButtonPanel, BorderLayout.CENTER);
 
-        // 카테고리 랭킹을 표시하는 패널
-        JPanel topCategoriesPanel = new JPanel(new BorderLayout());
-
-        // 1행: "카테고리랭킹" 글자를 나타내는 레이블
-        JLabel categoryRankingLabel = new JLabel("[카테고리랭킹]", SwingConstants.CENTER);
+        // "카테고리랭킹" 글자 레이블
+        JLabel categoryRankingLabel = new JLabel("[카테고리 랭킹]", SwingConstants.CENTER);
         categoryRankingLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-        topCategoriesPanel.add(categoryRankingLabel, BorderLayout.NORTH);
+        add(categoryRankingLabel, BorderLayout.NORTH);
 
-        // 2행: 카테고리 버튼을 나타내는 패널
-        JPanel categoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        // 카테고리 버튼을 나타내는 패널
+        JPanel categoryButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 5));
         updateTopCategories(categoryButtonPanel);
-        topCategoriesPanel.add(categoryButtonPanel, BorderLayout.CENTER);
 
-        // 하단에 상위 게시물 및 랭킹을 표시하는 JSplitPane
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topRegionsPanel, topCategoriesPanel);
-        splitPane.setDividerLocation(360); // 조절 가능한 값
-        mainPanel.add(splitPane, BorderLayout.CENTER);
+        // 뒤로가기 버튼을 왼쪽에 추가
+        add(categoryButtonPanel, BorderLayout.CENTER);
+        
+        JButton backButton = new JButton("뒤로가기");
+        backButton.setBounds(56, 632, 167, 50);
+        backButton.setLayout(null);
+        backButton.addActionListener(e->{
+        	parent.showMainPage(manager,userId);
+        });
+        add(backButton);
+    }
 
-        add(mainPanel);
+    private JButton createImageButton(String imagePath, String buttonText, int ranking, int count) {
+        JButton button = new JButton();
 
-        setLocationRelativeTo(null); // 화면 중앙에 프레임 배치
-        setVisible(true);
+        // 레이아웃 매니저 설정
+        button.setLayout(new BorderLayout());
+
+        // 버튼 아이콘 설정
+        ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(185, 185, Image.SCALE_DEFAULT));
+        button.setIcon(icon);
+
+        // 랭킹 레이블 설정
+        JLabel rankingLabel = new JLabel("[" + ranking + "위]");
+        rankingLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16)); // 랭킹 폰트 크기 조절
+        rankingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        button.add(rankingLabel, BorderLayout.NORTH);
+
+        // 이름 레이블 설정
+        JLabel nameLabel = new JLabel(buttonText + " : " + count + "개");
+        nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16)); // 이름 폰트 크기 조절
+        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        button.add(nameLabel, BorderLayout.SOUTH);
+
+        button.setPreferredSize(new Dimension(200, 240));
+
+        return button;
     }
 
     private void updateTopRegions(JPanel topRegionsPanel) {
         ArrayList<Manageable> postList = manager.postList;
         Ranking ranking = new Ranking();
 
-        // Get the list of top regions
         ArrayList<String> topRegions = ranking.getTopRegions(postList, 5);
 
-        // Update the top regions buttons
         for (int i = 0; i < topRegions.size(); i++) {
             String region = topRegions.get(i);
-            JButton regionButton = createImageButton("images/" + region + ".png", region, i + 1);
+            int count = getCountForRegion(region, postList);
+            JButton regionButton = createImageButton("images/region/" + region + ".png", region, i + 1, count);
+            regionButton.setBackground(Color.WHITE);
             topRegionsPanel.add(regionButton);
         }
     }
+
+    private int getCountForRegion(String region, ArrayList<Manageable> postList) {
+        int count = 0;
+
+        for (Manageable post : postList) {
+            if (post instanceof Post && ((Post) post).getRegion().equalsIgnoreCase(region)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
     private void updateTopCategories(JPanel topCategoriesPanel) {
         ArrayList<Manageable> postList = manager.postList;
         Ranking ranking = new Ranking();
 
-        // Get the list of top categories
         ArrayList<String> topCategories = ranking.getTopCategories(postList, 5);
 
-        // Update the top categories buttons
         for (int i = 0; i < topCategories.size(); i++) {
             String category = topCategories.get(i);
-            JButton categoryButton = createImageButton("images/" + category + ".png", category, i + 1);
+            int count = getCountForCategory(category, postList);
+            JButton categoryButton = createImageButton("images/category/" + category + ".png", category, i + 1, count);
+            categoryButton.setBackground(Color.WHITE);
             topCategoriesPanel.add(categoryButton);
         }
     }
 
-    private JButton createImageButton(String imagePath, String buttonText, int ranking) {
-        JButton button = new JButton();
+    private int getCountForCategory(String category, ArrayList<Manageable> postList) {
+        int count = 0;
 
-        // Set layout manager
-        button.setLayout(new BorderLayout());
+        for (Manageable post : postList) {
+            if (post instanceof Post && ((Post) post).getPostCategory().get("category").equalsIgnoreCase(category)) {
+                count++;
+            }
+        }
 
-        // Set button icon
-        ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(210, 210, Image.SCALE_DEFAULT));
-        button.setIcon(icon);
-
-        // Set ranking label
-        JLabel rankingLabel = new JLabel("[" + ranking + "위]");
-        rankingLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 16)); // 순위 폰트 크기 조절
-        rankingLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        button.add(rankingLabel, BorderLayout.NORTH);
-
-        // Set button text
-        JLabel nameLabel = new JLabel(buttonText);
-        nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20)); // 이름 폰트 크기 조절
-        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        button.add(nameLabel, BorderLayout.SOUTH);
-
-        // Set preferred size
-        button.setPreferredSize(new Dimension(220, 270));
-
-        button.addActionListener(e -> {
-            // 버튼 클릭 시 검색 결과 페이지로 이동
-           // goToSearchResults(buttonText, ranking, MainPage, mgr);
-        });
-        return button;
+        return count;
     }
-    // RankingPage 클래스의 goToSearchResults 메서드 수정
-    private void goToSearchResults(String buttonText, int ranking, MainPage mainPage, Manager mgr) {
-        // 선택된 지역 또는 카테고리에 따라 검색 결과 페이지로 이동
-    }
-    public static void main(String[] args) {
-        Manager manager = new Manager();
-        Post post = new Post();
-        manager.readAllUser("userListData.txt");
-        manager.readAllPost("postList.txt");
-        SwingUtilities.invokeLater(() -> new RankingPage(manager));
+
+
+
+    private JButton createBackButton() {
+        JButton backButton = new JButton("뒤로가기");
+
+        backButton.setLayout(new FlowLayout(FlowLayout.LEFT));
+        backButton.setPreferredSize(new Dimension(200, 50));
+//        backButton.addActionListener();
+
+        return backButton;
     }
 }

@@ -1,6 +1,7 @@
 package swing;
 
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 
@@ -39,6 +40,7 @@ public class PostWritePage extends JPanel {
 		JLabel postTitleLabel = new JLabel(" 게시글 제목");
 		postTitleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		postTitleLabel.setBounds(75, 42, 428, 45);
+		postTitleLabel.setForeground(Color.WHITE);
 		add(postTitleLabel);
 		
 		postTitleTextField = new JTextField();
@@ -64,17 +66,20 @@ public class PostWritePage extends JPanel {
 		JLabel postContentLabel = new JLabel(" 게시글 본문");
 		postContentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		postContentLabel.setBounds(75, 259, 414, 45);
+		postContentLabel.setForeground(Color.WHITE);
 		add(postContentLabel);
 		
 		JLabel postRegionLabel = new JLabel(" 지역");
 		postRegionLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		postRegionLabel.setBounds(75, 168, 80, 73);
+		postRegionLabel.setForeground(Color.WHITE);
 		add(postRegionLabel);
 		
 		JLabel postCategoryLabel = new JLabel("카테고리");
 		postCategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		postCategoryLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		postCategoryLabel.setBounds(275, 168, 120, 73);
+		postCategoryLabel.setForeground(Color.WHITE);
 		add(postCategoryLabel);
 		
 		String postRegion[] = {"선택","경기","부산","대구","충북","충남","인천","전북","전남","대전","광주","경북","경남","제주"};
@@ -93,6 +98,7 @@ public class PostWritePage extends JPanel {
 		postRateLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		postRateLabel.setFont(new Font("Lucida Grande", Font.BOLD, 25));
 		postRateLabel.setBounds(524, 169, 54, 73);
+		postRateLabel.setForeground(Color.WHITE);
 		add(postRateLabel);
 		
 		JSlider slider = new JSlider();
@@ -101,6 +107,7 @@ public class PostWritePage extends JPanel {
 		slider.setValue(3);
 		slider.setMaximum(5);
 		slider.setBounds(590, 169, 150, 73);
+		slider.setBackground(new Color(0, 0, 0, 0));
 		add(slider);
 		
 		fileChooser = new JFileChooser();
@@ -142,6 +149,10 @@ public class PostWritePage extends JPanel {
         });
 		uploadButton.setBounds(851, 632, 117, 50);
 		add(uploadButton);
+		
+		JPanel background = new ImagePanel();
+		background.setBounds(0, 0, 1024, 768);
+		add(background);
 		
 	}
 }

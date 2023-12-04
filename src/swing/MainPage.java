@@ -143,9 +143,9 @@ public class MainPage extends JPanel {
         recentPostsList.setCellRenderer(postListRenderer);
 		setLayout(null);
 
-		String postRegion[] = { "전체", "경기", "부산", "대구", "충북", "충남", "인천", "전북", "전남", "대전", "광주", "경북", "경남", "제주" };
+		String postRegion[] = { "전체", "서울", "경기", "부산", "강원", "대구", "충북", "충남", "인천", "전북", "전남", "대전", "광주", "경북", "경남", "제주" };
 
-		String postCategoey[] = { "전체", "관광명소", "맛집", "카페", "연인", "가족여행", "사진" };
+		String postCategoey[] = { "전체", "관광명소", "맛집", "카페", "연인", "가족여행", "사진", "알뜰여행" };
 
 		JPanel menuPanel = new JPanel();
 		menuPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -298,10 +298,14 @@ public class MainPage extends JPanel {
 		JButton rankingButton = new JButton("랭킹 페이지");
 		rankingButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		rankingButton.addActionListener(e -> {
-			parent.showMainPage(mgr, userId);
+			parent.showRankingPage(mgr);
 		});
 		rankingButton.setBounds(56, 632, 167, 50);
 		add(rankingButton);
+		
+		JPanel background = new ImagePanel();
+		background.setBounds(0, 0, 1024, 768);
+		add(background);
 
 	}
 
@@ -330,15 +334,17 @@ public class MainPage extends JPanel {
 	            String author = "작성자 : " + post.getPostWriter();
 	            String likes = "좋아요 : " + post.getGoodPoint().size();
 	            String dislikes = "싫어요 : " + post.getBadPoint().size();
+	            String postRate = "평점 : " + post.getPostRate();  
 	            String comments = "댓글 : " + commentLists.size(); 
 
 	            Font titleFont = getFont().deriveFont(getFont().getSize() * 2f);
-	            Font regionFont = getFont().deriveFont(getFont().getSize() * 1.5f);  // Adjusted font size
-	            Font categoryFont = getFont().deriveFont(getFont().getSize() * 1.5f);  // Adjusted font size
+	            Font regionFont = getFont().deriveFont(getFont().getSize() * 1.5f);
+	            Font categoryFont = getFont().deriveFont(getFont().getSize() * 1.5f);
 	            Font authorFont = getFont().deriveFont(getFont().getSize() * 1.5f);
 	            Font likesFont = getFont().deriveFont(getFont().getSize() * 1.5f);
 	            Font dislikesFont = getFont().deriveFont(getFont().getSize() * 1.5f);
-	            Font commentsFont = getFont().deriveFont(getFont().getSize() * 1.5f);  // Adjusted font size
+	            Font postRateFont = getFont().deriveFont(getFont().getSize() * 1.5f);
+	            Font commentsFont = getFont().deriveFont(getFont().getSize() * 1.5f);
 
 	            String formattedText = "<html><body style='width: 500px;'>" + "<div style='float: left;'>"
 	                    + "<b style='font-size:" + titleFont.getSize() + "'>" + title + "</b><br>"
@@ -348,15 +354,14 @@ public class MainPage extends JPanel {
 	                    + "<div style='float: right; text-align: right;'>" + "<font style='font-size:"
 	                    + likesFont.getSize() + "'>" + likes + "</font>&nbsp;&nbsp;&nbsp;<font style='font-size:"
 	                    + dislikesFont.getSize() + "'>" + dislikes + "</font>&nbsp;&nbsp;&nbsp;<font style='font-size:"
+	                    + postRateFont.getSize() + "'>" + postRate + "</font>&nbsp;&nbsp;&nbsp;<font style='font-size:"
 	                    + commentsFont.getSize() + "'>" + comments + "</font></div></body></html>";
 
-
-
 	            setText(formattedText);
-	            setIcon(new ImageIcon(post.getPostImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
-
+	            setIcon(new ImageIcon(post.getPostImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH)));
 	        }
 	        return this;
 	    }
-	} 
+	}
+
 }

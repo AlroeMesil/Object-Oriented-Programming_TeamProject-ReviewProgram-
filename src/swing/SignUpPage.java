@@ -1,7 +1,11 @@
 package swing;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,26 +31,32 @@ public class SignUpPage extends JPanel {
     public SignUpPage(ControlPage parent, Manager mgr) {
         this.parent = parent;
         setLayout(null);
+        
+        JPanel panel = new JPanel();
+        panel.setBounds(150, 150, 724, 468);
+        panel.setBackground(new Color(175, 238, 238));
+        add(panel);
+        panel.setLayout(null);
 
-        idLabel = new JLabel("ID");
+        idLabel = new JLabel("아이디");
+        idLabel.setBounds(388, 103, 222, 37);
         idLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        idLabel.setBounds(444, 173, 222, 37);
-        add(idLabel);
+        panel.add(idLabel);
 
         idTextField = new JTextField();
+        idTextField.setBounds(388, 143, 277, 51);
+        panel.add(idTextField);
         idTextField.setColumns(10);
-        idTextField.setBounds(440, 210, 277, 51);
-        add(idTextField);
 
-        passwordLabel = new JLabel("Password");
+        passwordLabel = new JLabel("비밀번호");
+        passwordLabel.setBounds(388, 213, 222, 37);
+        panel.add(passwordLabel);
         passwordLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        passwordLabel.setBounds(444, 300, 222, 37);
-        add(passwordLabel);
 
         passwordTextField = new JTextField();
+        passwordTextField.setBounds(388, 260, 277, 51);
+        panel.add(passwordTextField);
         passwordTextField.setColumns(10);
-        passwordTextField.setBounds(440, 337, 277, 51);
-        add(passwordTextField);
 
         JButton signUpButton = new JButton("회원가입");
         signUpButton.addActionListener(e -> {
@@ -56,44 +66,49 @@ public class SignUpPage extends JPanel {
         		JOptionPane.showMessageDialog(this, "회원가입 실패");
         	}
         });
-        signUpButton.setBounds(640, 488, 120, 50);
-        add(signUpButton);
+        signUpButton.setBounds(575, 391, 120, 50);
+        panel.add(signUpButton);
 
         JButton backButton = new JButton("뒤로가기");
         backButton.addActionListener(e -> {
             parent.showSignInPage();
         });
-        backButton.setBounds(37, 488, 120, 50);
-        add(backButton);
+        backButton.setBounds(23, 392, 120, 50);
+        panel.add(backButton);
 
         nameLabel = new JLabel("이름");
         nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        nameLabel.setBounds(58, 100, 222, 37);
-        add(nameLabel);
+        nameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+        nameLabel.setBounds(36, 33, 222, 37);
+        panel.add(nameLabel);
 
         nameTextField = new JTextField();
+        nameTextField.setBounds(36, 75, 277, 51);
         nameTextField.setColumns(10);
-        nameTextField.setBounds(52, 140, 277, 51);
-        add(nameTextField);
+        panel.add(nameTextField);
 
         nicknameTextField = new JTextField();
+        nicknameTextField.setBounds(36, 197, 277, 51);
         nicknameTextField.setColumns(10);
-        nicknameTextField.setBounds(52, 251, 277, 51);
-        add(nicknameTextField);
+        panel.add(nicknameTextField);
 
         emailTextField = new JTextField();
+        emailTextField.setBounds(36, 313, 277, 51);
+        panel.add(emailTextField);
         emailTextField.setColumns(10);
-        emailTextField.setBounds(52, 367, 277, 51);
-        add(emailTextField);
 
         nicknameLabel = new JLabel("닉네임");
+        nicknameLabel.setBounds(38, 155, 222, 37); 
+        panel.add(nicknameLabel);
         nicknameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        nicknameLabel.setBounds(58, 215, 222, 37);
-        add(nicknameLabel);
 
         emailLabel = new JLabel("이메일");
+        emailLabel.setBounds(38, 272, 222, 37);
+        panel.add(emailLabel);
         emailLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        emailLabel.setBounds(58, 330, 222, 37);
-        add(emailLabel);
+        
+        JPanel background = new ImagePanel();
+		background.setBounds(0, 0, 1024, 768);
+		add(background);
     }
 }

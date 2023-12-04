@@ -48,7 +48,7 @@ public class IndiviBoardPage extends JPanel {
 	}
 
 	public void initialize(Post post, Manager mgr, String userId, MainPage mainPage) {
-        setLayout(null);
+		setLayout(null);
 		// ================================ 이미지 ================================
 		// 게시글 이미지 라벨 출력
 		postImageLabel = new JLabel("게시글 이미지");
@@ -67,9 +67,9 @@ public class IndiviBoardPage extends JPanel {
 		JPanel imagePanel = new JPanel();
 		imagePanel.setBounds(52, 101, 339, 292);
 //		imageBorderPane.add(imagePanel);
-		String imagePath = "images/" + post.getPostNum() + ".png"; // 프로젝트 절대 경로 수정 필요
+		String imagePath = "images/post/" + post.getPostNum() + ".png"; // 프로젝트 절대 경로 수정 필요
 		ImageIcon icon = new ImageIcon(
-				new ImageIcon(imagePath).getImage().getScaledInstance(640, 360, Image.SCALE_DEFAULT));
+				new ImageIcon(imagePath).getImage().getScaledInstance(339, 292, Image.SCALE_DEFAULT));
 		JLabel imageLabel = new JLabel(icon);
 		imagePanel.add(imageLabel);
 		add(imagePanel);
@@ -77,46 +77,36 @@ public class IndiviBoardPage extends JPanel {
 
 		// ================================ 기타 ================================
 		// 기타 정보 테두리 패널
+		// 기타 정보 테두리 패널
 		JPanel etcBorderPane = new JPanel();
 		etcBorderPane.setBounds(52, 434, 339, 179);
 		etcBorderPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		add(etcBorderPane);
-		GridBagLayout gbl_etcBorderPane = new GridBagLayout();
-		gbl_etcBorderPane.columnWidths = new int[] { 335, 0 };
-		gbl_etcBorderPane.rowHeights = new int[] { 58, 58, 58, 0 };
-		gbl_etcBorderPane.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
-		gbl_etcBorderPane.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		etcBorderPane.setLayout(gbl_etcBorderPane);
+		etcBorderPane.setLayout(null);
 
 		// 게시글 작성자 라벨 출력
 		writerLabel = new JLabel("  작성자 : " + post.getPostWriter());
-		writerLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		GridBagConstraints gbc_writerLabel = new GridBagConstraints();
-		gbc_writerLabel.fill = GridBagConstraints.BOTH;
-		gbc_writerLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_writerLabel.gridx = 0;
-		gbc_writerLabel.gridy = 0;
-		etcBorderPane.add(writerLabel, gbc_writerLabel);
+		writerLabel.setBounds(2, 15, 300, 25);
+		writerLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		etcBorderPane.add(writerLabel);
 
 		// 게시글 지역 라벨 출력
 		regionLabel = new JLabel("  지역 : " + post.getRegion());
+		regionLabel.setBounds(2, 55, 300, 25);
 		regionLabel.setEnabled(true);
-		regionLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		GridBagConstraints gbc_regionLabel = new GridBagConstraints();
-		gbc_regionLabel.fill = GridBagConstraints.BOTH;
-		gbc_regionLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_regionLabel.gridx = 0;
-		gbc_regionLabel.gridy = 1;
-		etcBorderPane.add(regionLabel, gbc_regionLabel);
+		regionLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		etcBorderPane.add(regionLabel);
 
 		// 게시글 카테고리 출력
 		categoryLabel = new JLabel("  카테고리 : " + post.getPostCategory().get("category"));
-		categoryLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		GridBagConstraints gbc_categoryLabel = new GridBagConstraints();
-		gbc_categoryLabel.fill = GridBagConstraints.BOTH;
-		gbc_categoryLabel.gridx = 0;
-		gbc_categoryLabel.gridy = 2;
-		etcBorderPane.add(categoryLabel, gbc_categoryLabel);
+		categoryLabel.setBounds(2, 95, 300, 25);
+		categoryLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		etcBorderPane.add(categoryLabel);
+		
+		JLabel rateLabel = new JLabel("  평점 : "+post.getPostRate()+"점");
+		rateLabel.setBounds(2, 135, 300, 25);
+		rateLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		etcBorderPane.add(rateLabel);
 		// ================================ 기타 ================================
 
 		// ================================ 게시글 ================================
@@ -144,7 +134,7 @@ public class IndiviBoardPage extends JPanel {
 
 		// 게시글 본문 라벨 출력
 		postContentLabel = new JLabel("게시글 본문");
-		postContentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 20));
+		postContentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 		postContentLabel.setEnabled(true);
 		postContentLabel.setBounds(432, 163, 122, 39);
 		add(postContentLabel);
@@ -158,7 +148,7 @@ public class IndiviBoardPage extends JPanel {
 
 		// 게시글 본문 출력
 		postContentTextArea = new JTextArea(post.getPostContent());
-		postContentTextArea.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		postContentTextArea.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		postContentTextArea.setEditable(false);
 		postContentTextArea.setColumns(10);
 		postContentTextArea.setBounds(6, 6, 241, 387);
@@ -169,7 +159,12 @@ public class IndiviBoardPage extends JPanel {
 
 		// ================================ 좋아요/싫어요 ================================
 		// 좋아요 버튼
-		goodButton = new JButton("좋아요");
+		ImageIcon goodimg = new ImageIcon("./images/like.png");
+		Image gimg = goodimg.getImage();
+		Image goodimag1 = gimg.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon like = new ImageIcon(goodimag1);
+
+		goodButton = new JButton(like);
 		goodButton.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
@@ -189,7 +184,10 @@ public class IndiviBoardPage extends JPanel {
 				}
 			}
 		});
-		goodButton.setBounds(432, 649, 83, 50);
+		goodButton.setBorderPainted(false);
+		goodButton.setFocusPainted(false);
+		goodButton.setContentAreaFilled(false);
+		goodButton.setBounds(430, 649, 83, 50);
 		add(goodButton);
 
 		// 좋아요 라벨
@@ -197,11 +195,16 @@ public class IndiviBoardPage extends JPanel {
 		likeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		likeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		likeLabel.setEnabled(true);
-		likeLabel.setBounds(527, 648, 61, 50);
+		likeLabel.setBounds(480, 648, 61, 50);
 		add(likeLabel);
 
 		// 싫어요 버튼
-		badButton = new JButton("싫어요");
+		ImageIcon badimage = new ImageIcon("./images/bad.png");
+		Image bimg = badimage.getImage();
+		Image badimage1 = bimg.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon bad = new ImageIcon(badimage1);
+
+		badButton = new JButton(bad);
 		badButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String checker = "";
@@ -220,7 +223,10 @@ public class IndiviBoardPage extends JPanel {
 				}
 			}
 		});
-		badButton.setBounds(600, 649, 83, 50);
+		badButton.setBorderPainted(false);
+		badButton.setFocusPainted(false);
+		badButton.setContentAreaFilled(false);
+		badButton.setBounds(580, 649, 83, 50);
 		add(badButton);
 
 		// 싫어요 라벨
@@ -228,7 +234,7 @@ public class IndiviBoardPage extends JPanel {
 		badLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		badLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		badLabel.setEnabled(true);
-		badLabel.setBounds(695, 648, 73, 50);
+		badLabel.setBounds(630, 648, 73, 50);
 		add(badLabel);
 		// ================================ 좋아요/싫어요 ================================
 
@@ -247,15 +253,15 @@ public class IndiviBoardPage extends JPanel {
 		commentBorderPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		add(commentBorderPane);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 241, 456);
-		commentBorderPane.add(scrollPane);
-
 		// 댓글 리스트
 		JList<Comment> commentListPage = new JList<>();
-		commentListPage.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		commentListPage.setFont(new Font("Lucida Grande", Font.BOLD, 12));
 		DefaultListModel<Comment> commentListModel = new DefaultListModel<>();
 		ArrayList<Comment> comments = mgr.searchComment(post.getPostNum());
+
+		JScrollPane scrollPane = new JScrollPane(commentListPage);
+		scrollPane.setBounds(6, 6, 241, 456);
+		commentBorderPane.add(scrollPane);
 
 		// 댓글 최신순 정렬
 		for (int i = comments.size() - 1; i >= 0; i--) {
@@ -273,11 +279,12 @@ public class IndiviBoardPage extends JPanel {
 				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				if (renderer instanceof JLabel) {
 					JLabel commentLabel = (JLabel) renderer;
-					commentLabel.setText("<html><p style='width:250px'>" + value.toString() + "</p></html>");
+					commentLabel
+							.setText("<html><p style='width:250px; margin:5px'>" + value.toString() + "</p></html>");
 					commentLabel.setPreferredSize(null);
 
 					int preferredHeight = calculatePreferredHeight(commentLabel);
-					commentLabel.setPreferredSize(new Dimension(250, preferredHeight));
+					commentLabel.setPreferredSize(new Dimension(320, preferredHeight));
 					commentLabel.setHorizontalAlignment(JLabel.LEFT);
 				}
 				return renderer;
@@ -355,5 +362,8 @@ public class IndiviBoardPage extends JPanel {
 		deleteButton.setBounds(858, 649, 117, 50);
 		add(deleteButton); // deletePost
 
+		JPanel background = new ImagePanel();
+		background.setBounds(0, 0, 1024, 768);
+		add(background);
 	}
 }

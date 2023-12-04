@@ -380,7 +380,7 @@ public class Manager {
 					deleteablePost.deletePost(postList, postId, userId);
 					savePostDataToFile(postList);
 					// 해당 게시글의 이미지 데이터 삭제
-					File imageFile = new File("images/" + postId + ".png");
+					File imageFile = new File("images/post/" + postId + ".png");
 					if (imageFile.exists()) {
 						if (imageFile.delete()) {
 							System.out.println("게시글 이미지 파일이 삭제되었습니다.");

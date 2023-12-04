@@ -2,7 +2,10 @@ package swing;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -17,6 +20,7 @@ public class ControlPage {
     private SignInPage signInPage;
     private SignUpPage signUpPage;
     private MainPage mainPage;
+    private RankingPage rankingPage;
     private PostWritePage postWritePage;
     private IndiviBoardPage indiviBoardPage;
     public String userId;
@@ -25,13 +29,13 @@ public class ControlPage {
      * Launch the application.
      */
     public static void main(String[] args) {
-    	Manager mgr = new Manager();
+        Manager mgr = new Manager();
         mgr.readAllPost("postList.txt");
         mgr.readAllUser("userListData.txt");
         mgr.readAllComment("commentList.txt");
         EventQueue.invokeLater(() -> {
             try {
-            	ControlPage window = new ControlPage(mgr);
+                ControlPage window = new ControlPage(mgr);
                 window.frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -55,22 +59,19 @@ public class ControlPage {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-//        frame.setVisible(true);
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         signInPage = new SignInPage(this, mgr);
         signUpPage = new SignUpPage(this, mgr);
-        
 
         cardPanel.add(signInPage, "SignIn");
         cardPanel.add(signUpPage, "SignUp");
-        
 
         frame.getContentPane().add(cardPanel);
-
         showSignInPage();
     }
+
 
     public void showSignInPage() {
         cardLayout.show(cardPanel, "SignIn");
@@ -87,6 +88,12 @@ public class ControlPage {
         System.out.println("로그인 유저 : "+this.userId);
     }
     
+    public void showRankingPage(Manager mgr) {
+    	rankingPage = new RankingPage(this, mgr, userId);
+    	cardPanel.add(rankingPage, "Ranking");
+        cardLayout.show(cardPanel, "Ranking");
+    }
+    
     public void showPostWritePage(Manager mgr) {
     	postWritePage = new PostWritePage(this, mgr, userId);
     	cardPanel.add(postWritePage, "PostWrite");
@@ -98,5 +105,4 @@ public class ControlPage {
 		cardPanel.add(indiviBoardPage, "IndiviBoard");
 		cardLayout.show(cardPanel, "IndiviBoard");
 	}
-
 }
