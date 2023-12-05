@@ -125,7 +125,7 @@ public class MainPage extends JPanel {
 		for (Manageable post : posts) {
 			if (post instanceof Post) {
 				Post castedPost = (Post) post;
-				if (castedPost.getPostTitle().contains(keyword) || castedPost.getPostContent().contains(keyword)) {
+				if (castedPost.getPostTitle().contains(keyword) || castedPost.getPostContent().contains(keyword) || castedPost.getPostCategory().get("category").contains(keyword) || castedPost.getRegion().contains(keyword)) {
 					filteredPosts.add(post);
 				}
 			}
@@ -143,7 +143,7 @@ public class MainPage extends JPanel {
         recentPostsList.setCellRenderer(postListRenderer);
 		setLayout(null);
 
-		String postRegion[] = { "전체", "서울", "경기", "부산", "강원", "대구", "충북", "충남", "인천", "전북", "전남", "대전", "광주", "경북", "경남", "제주" };
+		String postRegion[] = { "전체", "서울", "경기", "부산", "강원", "대구", "울산", "충북", "충남", "인천", "전북", "전남", "대전", "광주", "경북", "경남", "제주" };
 
 		String postCategoey[] = { "전체", "관광명소", "맛집", "카페", "연인", "가족여행", "사진", "알뜰여행" };
 

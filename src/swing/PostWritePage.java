@@ -82,13 +82,14 @@ public class PostWritePage extends JPanel {
 		postCategoryLabel.setForeground(Color.WHITE);
 		add(postCategoryLabel);
 		
-		String postRegion[] = {"선택", "서울", "경기", "부산", "강원", "대구", "충북", "충남", "인천", "전북", "전남", "대전", "광주", "경북", "경남", "제주"};
+		String postRegion[] = { "선택", "서울", "경기", "부산", "강원", "대구", "울산", "충북", "충남", "인천", "전북", "전남", "대전", "광주", "경북", "경남", "제주" };
+
 		JComboBox<String> postRegionComboBox = new JComboBox<>(postRegion);
 		postRegionComboBox.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		postRegionComboBox.setBounds(150, 179, 94, 52);
 		add(postRegionComboBox);
 		
-		String postCategoey[] = {"선택", "관광명소", "맛집", "카페", "연인", "가족여행", "사진", "알뜰여행"};
+		String postCategoey[] = { "선택", "관광명소", "맛집", "카페", "연인", "가족여행", "사진", "알뜰여행" };
 		JComboBox<String> postCategoryComboBox = new JComboBox<>(postCategoey);
 		postCategoryComboBox.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		postCategoryComboBox.setBounds(395, 179, 94, 52);

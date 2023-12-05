@@ -126,9 +126,11 @@ public class Post implements Manageable {
 	    }
 	    File imageFile = new File("images/post/"+postNum+".png");
 	    try {
+	    	System.out.println(postNum);
 	    	postImage = ImageIO.read(imageFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.print(postNum);
 			e.printStackTrace();
 		}
 	}
